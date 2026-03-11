@@ -40,12 +40,9 @@ function Login()
 
           var res = JSON.parse(await response.text());
 
-          setMessage('res/id = ' + res.id);
-
           if( res.id <= 0 )
           {
-              setMessage('res/id = ' + res.id);
-              setMessage('User/Password combination incorrect' + res.id);
+              setMessage('User/Password combination incorrect');
           }
           else
           {
