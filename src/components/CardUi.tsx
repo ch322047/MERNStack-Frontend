@@ -4,11 +4,7 @@ function CardUI()
 {
     function buildPath(route:string) : string
     {
-<<<<<<< HEAD
-        return `http://localhost:5001/${route}`;
-=======
         return `http://lampstackprojectgroup9.com/api/${route}`;
->>>>>>> f1846b1 (first commit)
     }
 
     let _ud : any = localStorage.getItem('user_data');

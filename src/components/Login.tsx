@@ -6,14 +6,9 @@ function Login()
   const [loginName, setLoginName] = useState('');
   const [loginPassword, setPassword] = useState('');
 
-<<<<<<< HEAD
-  function buildPath(route: string): string {
-    return `http://localhost:5001/${route}`;
-=======
   function buildPath(route:string) : string
   {
       return `http://lampstackprojectgroup9.com/api/${route}`;
->>>>>>> f1846b1 (first commit)
   }
 
   async function doLogin(event: any): Promise<void>
