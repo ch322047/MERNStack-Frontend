@@ -8,7 +8,7 @@ function Login()
 
   function buildPath(route:string) : string
   {
-      return `http://lampstackprojectgroup9.com/api/${route}`;
+      return `https://lampstackprojectgroup9.com/api/${route}`;
   }
 
   async function doLogin(event: any): Promise<void>

@@ -4,7 +4,7 @@ function CardUI()
 {
     function buildPath(route:string) : string
     {
-        return `http://lampstackprojectgroup9.com/api/${route}`;
+        return `https://lampstackprojectgroup9.com/api/${route}`;
     }
 
     let _ud : any = localStorage.getItem('user_data');
