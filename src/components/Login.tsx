@@ -20,13 +20,13 @@ function Login()
 
     try
     {
-      const response = await fetch(buildPath('api/login'), {
+      const response = await fetch(buildPath('login'), {
         method: 'POST',
         body: js,
         headers: { 'Content-Type': 'application/json' }
       });
 
-      const res = JSON.parse(await response.text());
+      const res = await response.json();
 
       if (res.id <= 0)
       {
