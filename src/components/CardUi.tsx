@@ -2,104 +2,107 @@ import { useState } from 'react';
 
 function CardUI()
 {
+    function buildPath(route:string) : string
+    {
+        return `http://localhost:5001/${route}`;
+    }
+
     let _ud : any = localStorage.getItem('user_data');
-    let ud = JSON.parse( _ud );
+    let ud = _ud ? JSON.parse(_ud) : { id: -1 };
     let userId : string = ud.id;
-    let firstName : string = ud.firstName;
-    let lastName : string = ud.lastName;
+
     const [message,setMessage] = useState('');
-    const [searchResults,setResults] = useState('');
-    const [cardList,setCardList] = useState('');
-    const [search,setSearchValue] = useState('');
-    const [card,setCardNameValue] = useState('');
-   
-function handleSearchTextChange( e: any ) : void
-    {
-        setSearchValue( e.target.value );
-    }
+    const [searchResults,setResults] = useState('');
+    const [cardList,setCardList] = useState('');
+    const [search,setSearchValue] = useState('');
+    const [card,setCardNameValue] = useState('');
 
-    function handleCardTextChange( e: any ) : void
-    {
-        setCardNameValue( e.target.value );
-    }
-
-async function addCard(e:any) : Promise<void>
-{
-    e.preventDefault();
-
-    let obj = {userId:userId,card:card};
-    let js = JSON.stringify(obj);
-
-    try
+    function handleSearchTextChange(e:any):void
     {
-        const response = await fetch('http://localhost:5001/api/addcard',
-        {method:'POST',body:js,headers:{'Content-Type': 'application/json'}});
+        setSearchValue(e.target.value);
+    }
 
-        let txt = await response.text();
-        let res = JSON.parse(txt);
+    function handleCardTextChange(e:any):void
+    {
+        setCardNameValue(e.target.value);
+    }
 
-        if( res.error.length > 0 )
+    async function addCard(e:any):Promise<void>
+    {
+        e.preventDefault();
+
+        let obj = {userId:userId,card:card};
+        let js = JSON.stringify(obj);
+
+        try
         {
-            setMessage( "API Error:" + res.error );
+            const response = await fetch(buildPath('api/addcard'),
+            {method:'POST',body:js,headers:{'Content-Type':'application/json'}});
+
+            let res = await response.json();
+
+            if(res.error.length > 0)
+                setMessage("API Error: " + res.error);
+            else
+                setMessage('Card has been added');
         }
-        else
+        catch(error:any)
         {
-            setMessage('Card has been added');
+            setMessage(error.toString());
         }
     }
-    catch(error:any)
+
+    async function searchCard(e:any):Promise<void>
     {
-        setMessage(error.toString());
-    }
-};
+        e.preventDefault();
 
-async function searchCard(e:any) : Promise<void>
-{
-    e.preventDefault();
-    
-    let obj = {userId:userId,search:search};
-    let js = JSON.stringify(obj);
+        let obj = {userId:userId,search:search};
+        let js = JSON.stringify(obj);
 
-    try
-    {
-        const response = await fetch('http://localhost:5001/api/searchcards',
-        {method:'POST',body:js,headers:{'Content-Type': 'application/json'}});
-
-        let txt = await response.text();
-        let res = JSON.parse(txt);
-        let _results = res.results;
-        let resultText = '';
-        for( let i=0; i<_results.length; i++ )
+        try
         {
-            resultText += _results[i];
-            if( i < _results.length - 1 )
-            {
-                resultText += ', ';
-            }
+            const response = await fetch(buildPath('api/searchcards'),
+            {method:'POST',body:js,headers:{'Content-Type':'application/json'}});
+
+            let res = await response.json();
+            let results = res.results;
+
+            let resultText = results.join(', ');
+
+            setResults('Card(s) retrieved');
+            setCardList(resultText);
         }
-        setResults('Card(s) have been retrieved');
-        setCardList(resultText);
+        catch(error:any)
+        {
+            setResults(error.toString());
+        }
     }
-    catch(error:any)
-    {
-        alert(error.toString());
-        setResults(error.toString());
-    }
-};
 
     return(
         <div id="cardUIDiv">
-          <br />
-          Search: <input type="text" id="searchText" placeholder="Card To Search For" onChange={handleSearchTextChange} />
-          <button type="button" id="searchCardButton" className="buttons" onClick={searchCard}> Search Card</button><br />
-          <span id="cardSearchResult">{searchResults}</span>
-          
-          <p id="cardList">{cardList}</p><br /><br />
-          
-          Add: <input type="text" id="cardText" placeholder="Card To Add" onChange={handleCardTextChange} />
-          <button type="button" id="addCardButton" className="buttons" onClick={addCard}> Add Card </button><br />
-          
-          <span id="cardAddResult">{message}</span>
+
+          <br/>
+
+          Search:
+          <input type="text" placeholder="Card To Search For" onChange={handleSearchTextChange}/>
+          <button onClick={searchCard}>Search Card</button>
+
+          <br/>
+
+          <span>{searchResults}</span>
+
+          <p>{cardList}</p>
+
+          <br/><br/>
+
+          Add:
+          <input type="text" placeholder="Card To Add" onChange={handleCardTextChange}/>
+          <button onClick={addCard}>Add Card</button>
+
+          <br/>
+
+          <span>{message}</span>
+
         </div>
     );
 }
