@@ -11,58 +11,111 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-}
 
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
-}
-
-body {
-  margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
+  background-image: url('./assets/spacebkg.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
 }
 
 h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
+  color: white;
+  text-shadow:
+    -2px -2px 0 #000,
+     2px -2px 0 #000,
+    -2px  2px 0 #000,
+     2px  2px 0 #000;
 }
 
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
+.auth-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
-button:hover {
+
+.auth-box {
+  background-color: #2a2a2a;
+  border: 1px solid #444;
+  padding: 2rem;
+  border-radius: 16px;
+  width: 340px;
+  text-align: center;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
+}
+
+.tabs {
+  display: flex;
+  margin-bottom: 1.5rem;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid #444;
+}
+
+.tabs button {
+  flex: 1;
+  padding: 0.6em;
+  border: none;
+  background-color: #1a1a1a;
+  color: inherit;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.tabs button.active {
+  background-color: #646cff;
+  color: white;
+  font-weight: 600;
+}
+
+.tabs button:hover {
+  background-color: #535bf2;
+  color: white;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+input {
+  padding: 0.7em;
+  border-radius: 10px;
+  border: 1px solid #555;
+  background-color: #1a1a1a;
+  color: white;
+  font-family: inherit;
+  transition: border 0.2s ease;
+}
+
+input:focus {
+  outline: none;
   border-color: #646cff;
 }
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+
+button[type="submit"] {
+  margin: 1rem auto 0 auto;
+  width: 70%;
+  padding: 0.50em 1em;
+  border-radius: 999px;
+  background-color: #646cff;
+  color: white;
+  font-weight: 600;
+  font-size: 1.05rem;
+  display: block;
+  transition: all 0.25s ease;
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
+/* Hover */
+button[type="submit"]:hover {
+  background-color: #535bf2;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(100, 108, 255, 0.4);
+}
+
+.message {
+  margin-top: 1rem;
+  min-height: 1.5em;
 }
