@@ -20,7 +20,7 @@ function Auth() {
   const [registerPassword, setRegisterPassword] = useState('');
 
   function buildPath(route: string) {
-    return `${process.env.REACT_APP_API_URL}/${route}`;
+    return `https://lampstackprojectgroup9.com/api/${route}`;
   }
 
   async function doLogin(e: React.FormEvent) {
