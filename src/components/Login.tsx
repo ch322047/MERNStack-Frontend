@@ -34,7 +34,15 @@ function Auth() {
         headers: { 'Content-Type': 'application/json' },
       });
 
-      const res = await response.json();
+      const text = await response.text(); // get raw text first
+      let res;
+      try {
+        res = JSON.parse(text); // attempt JSON parse
+      } catch (err) {
+        console.error('Failed to parse JSON. Server returned:', text);
+        setMessage('Server error: see console');
+        return;
+      }
 
       if (res.error) {
         setMessage(res.error);
@@ -46,6 +54,8 @@ function Auth() {
       setMessage(err.toString());
     }
   }
+
+
 
   async function doRegister(e: React.FormEvent) {
     e.preventDefault();
@@ -64,11 +74,21 @@ function Auth() {
         headers: { 'Content-Type': 'application/json' },
       });
 
-      const res = await response.json();
+      const text = await response.text(); // get raw text first
+      let res;
+      try {
+        res = JSON.parse(text); // attempt JSON parse
+      } catch (err) {
+        console.error('Failed to parse JSON. Server returned:', text);
+        setMessage('Server error: see console');
+        return;
+      }
 
-      if (response.status !== 201) {
-        setMessage(res.error || 'Registration failed');
+      if (res.error) {
+        setMessage(res.error);
       } else {
+        localStorage.setItem('user_data', JSON.stringify(res.user));
+        navigate('/cards');
         setMessage('Registration successful! Check your email.');
         setTimeout(() => setIsLoginTab(true), 2000);
       }
