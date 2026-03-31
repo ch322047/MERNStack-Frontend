@@ -65,6 +65,8 @@ function Login()
 
       <button onClick={doLogin}>Login</button>
 
+      <button>New User</button>
+
       <span>{message}</span>
     </div>
   );
