@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import '../index.css';
 
-function CardUI()
+function Cards()
 {
     function buildPath(route:string) : string
     {
@@ -119,4 +119,4 @@ function CardUI()
     );
 }
 
-export default CardUI;
+export default Cards;
