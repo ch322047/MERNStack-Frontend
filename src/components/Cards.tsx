@@ -8,9 +8,14 @@ function Cards()
         return `https://lampstackprojectgroup9.com/api/${route}`;
     }
 
-    let _ud : any = localStorage.getItem('user_data');
-    let ud = _ud ? JSON.parse(_ud) : { id: -1 };
+    const stored = localStorage.getItem('user_data');
+    const ud = stored && stored !== "undefined" ? JSON.parse(stored) : { id: -1 };
     let userId : string = ud.id;
+
+    //if not logged in, redirect back to login page
+    if (ud.id == -1) {
+        window.location.href = "/";
+    }
 
     const [message,setMessage] = useState('');
     const [search,setSearchValue] = useState('');
