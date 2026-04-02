@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import '../index.css';
 
 function CardUI()
 {
@@ -12,26 +13,39 @@ function CardUI()
     let userId : string = ud.id;
 
     const [message,setMessage] = useState('');
-    const [searchResults,setResults] = useState('');
-    const [cardList,setCardList] = useState('');
     const [search,setSearchValue] = useState('');
-    const [card,setCardNameValue] = useState('');
+    const [cards,setCards] = useState<string[]>([]);
+    const [editingIndex,setEditingIndex] = useState<number | null>(null);
+
+    // live search
+    useEffect(() => {
+        async function fetchCards() {
+            let obj = {userId:userId,search:search};
+            let js = JSON.stringify(obj);
+
+            try {
+                const response = await fetch(buildPath('searchcards'),
+                {method:'POST',body:js,headers:{'Content-Type':'application/json'}});
+
+                let res = await response.json();
+                setCards(res.results || []);
+            }
+            catch(error:any) {
+                console.error(error);
+            }
+        }
+
+        fetchCards();
+    }, [search]);
 
     function handleSearchTextChange(e:any):void
     {
         setSearchValue(e.target.value);
     }
 
-    function handleCardTextChange(e:any):void
+    async function addCard():Promise<void>
     {
-        setCardNameValue(e.target.value);
-    }
-
-    async function addCard(e:any):Promise<void>
-    {
-        e.preventDefault();
-
-        let obj = {userId:userId,card:card};
+        let obj = {userId:userId,card:'New Trip'};
         let js = JSON.stringify(obj);
 
         try
@@ -44,7 +58,10 @@ function CardUI()
             if(res.error.length > 0)
                 setMessage("API Error: " + res.error);
             else
-                setMessage('Card has been added');
+            {
+                setMessage('Trip added');
+                setSearchValue(''); // refresh
+            }
         }
         catch(error:any)
         {
@@ -52,56 +69,51 @@ function CardUI()
         }
     }
 
-    async function searchCard(e:any):Promise<void>
+    function updateCardName(index:number,newName:string)
     {
-        e.preventDefault();
-
-        let obj = {userId:userId,search:search};
-        let js = JSON.stringify(obj);
-
-        try
-        {
-            const response = await fetch(buildPath('searchcards'),
-            {method:'POST',body:js,headers:{'Content-Type':'application/json'}});
-
-            let res = await response.json();
-            let results = res.results;
-
-            let resultText = results.join(', ');
-
-            setResults('Card(s) retrieved');
-            setCardList(resultText);
-        }
-        catch(error:any)
-        {
-            setResults(error.toString());
-        }
+        const updated = [...cards];
+        updated[index] = newName;
+        setCards(updated);
+        setEditingIndex(null);
     }
 
     return(
-        <div id="cardUIDiv">
+        <div className="cards-page">
 
-          <br/>
+            <input
+                className="search-bar"
+                type="text"
+                placeholder="Search Trips..."
+                value={search}
+                onChange={handleSearchTextChange}
+            />
 
-          Search:
-          <input type="text" placeholder="Card To Search For" onChange={handleSearchTextChange}/>
-          <button onClick={searchCard}>Search Card</button>
+            <div className="grid">
+                <div className="card add-card" onClick={addCard}>+ Add Trip</div>
+                {cards.map((c, index) => (
+                    <div key={index} className="card trip-card">
+                        {editingIndex === index ? (
+                            <input
+                                autoFocus
+                                defaultValue={c}
+                                onBlur={(e)=>updateCardName(index,e.target.value)}
+                                onKeyDown={(e)=>{
+                                    if(e.key==='Enter'){
+                                        updateCardName(index,(e.target as HTMLInputElement).value);
+                                    }
+                                }}
+                            />
+                        ) : (
+                            <span onClick={()=>setEditingIndex(index)}>
+                                {c}
+                            </span>
+                        )}
+                    </div>
+                ))}
 
-          <br/>
+            </div>
 
-          <span>{searchResults}</span>
-
-          <p>{cardList}</p>
-
-          <br/><br/>
-
-          Add:
-          <input type="text" placeholder="Card To Add" onChange={handleCardTextChange}/>
-          <button onClick={addCard}>Add Card</button>
-
-          <br/>
-
-          <span>{message}</span>
+            <p className="message">{message}</p>
 
         </div>
     );

@@ -119,3 +119,73 @@ button[type="submit"]:hover {
   margin-top: 1rem;
   min-height: 1.5em;
 }
+
+/* CARDS PAGE */
+.cards-page {
+  min-height: 100vh;
+  padding: 2rem;
+  text-align: center;
+}
+
+
+.cards-page h1 {
+  color: white;
+  text-shadow: 0 0 10px rgba(0,0,0,0.8);
+}
+
+.search-bar {
+  margin: 1rem auto 2rem auto;
+  padding: 0.6em 1em;
+  border-radius: 999px;
+  border: none;
+  width: 250px;
+  text-align: center;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 2rem;
+}
+
+.card {
+  height: 120px;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 1.2rem;
+  color: white;
+
+  cursor: pointer;
+
+  background: rgba(255,255,255,0.08);
+  backdrop-filter: blur(10px);
+
+  transition: all 0.25s ease;
+}
+
+.card:hover {
+  transform: scale(1.08);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+}
+
+.add-card {
+  background: linear-gradient(135deg, #646cff, #8a8fff);
+  font-weight: 600;
+}
+
+.trip-card {
+  background: rgba(255,255,255,0.12);
+}
+
+.trip-card input {
+  background: transparent;
+  border: none;
+  outline: none;
+  color: white;
+  text-align: center;
+  font-size: 1.2rem;
+  width: 80%;
+}
