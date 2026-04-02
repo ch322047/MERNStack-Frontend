@@ -12,11 +12,6 @@ function Cards()
     const ud = stored && stored !== "undefined" ? JSON.parse(stored) : { id: -1 };
     let userId : string = ud.id;
 
-    //if not logged in, redirect back to login page
-    if (ud.id == -1) {
-        window.location.href = "/";
-    }
-
     const [message,setMessage] = useState('');
     const [search,setSearchValue] = useState('');
     const [cards,setCards] = useState<string[]>([]);
