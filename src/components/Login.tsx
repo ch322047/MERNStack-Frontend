@@ -34,12 +34,11 @@ function Auth() {
         headers: { 'Content-Type': 'application/json' },
       });
 
-      const text = await response.text(); // get raw text first
       let res;
       try {
-        res = JSON.parse(text); // attempt JSON parse
+        res = await response.json()
       } catch (err) {
-        console.error('Failed to parse JSON. Server returned:', text);
+        console.error('Failed to parse JSON.');
         setMessage('Server error: see console');
         return;
       }
@@ -74,12 +73,11 @@ function Auth() {
         headers: { 'Content-Type': 'application/json' },
       });
 
-      const text = await response.text(); // get raw text first
       let res;
       try {
-        res = JSON.parse(text); // attempt JSON parse
+        res = await response.json()
       } catch (err) {
-        console.error('Failed to parse JSON. Server returned:', text);
+        console.error('Failed to parse JSON.');
         setMessage('Server error: see console');
         return;
       }
@@ -88,7 +86,6 @@ function Auth() {
         setMessage(res.error);
       } else {
         localStorage.setItem('user_data', JSON.stringify(res.user));
-        navigate('/cards');
         setMessage('Registration successful! Check your email.');
         setTimeout(() => setIsLoginTab(true), 2000);
       }
