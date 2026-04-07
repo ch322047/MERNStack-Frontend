@@ -4,13 +4,31 @@ interface TripFlightProps {
   tripId: string;
 }
 
+interface Flight {
+  _id?: string;
+  airline: string;
+  flightNumber: string;
+  departure: string;
+  arrival: string;
+  booked: boolean;
+}
+
 function TripFlight({ tripId }: TripFlightProps) {
   const stored = localStorage.getItem("user_data");
   const ud = stored && stored !== "undefined" ? JSON.parse(stored) : { id: -1 };
   const userId: string = ud.id;
 
-  const [flights, setFlights] = useState<any[]>([]);
+  const [flights, setFlights] = useState<Flight[]>([]);
   const [message, setMessage] = useState("");
+
+  const [showAddForm, setShowAddForm] = useState(false);
+  const [newFlight, setNewFlight] = useState<Flight>({
+    airline: "",
+    flightNumber: "",
+    departure: "",
+    arrival: "",
+    booked: false,
+  });
 
   const buildPath = (route: string) =>
     `https://lampstackprojectgroup9.com/api/${route}`;
@@ -31,15 +49,8 @@ function TripFlight({ tripId }: TripFlightProps) {
     fetchFlights();
   }, [tripId]);
 
-  const addFlight = async () => {
-    const newFlight = {
-      airline: "",
-      flightNumber: "",
-      departure: "",
-      arrival: "",
-      booked: false,
-    };
-
+  // Save new flight
+  const saveNewFlight = async () => {
     try {
       const res = await fetch(buildPath(`add-flight/${userId}/${tripId}`), {
         method: "POST",
@@ -48,29 +59,30 @@ function TripFlight({ tripId }: TripFlightProps) {
       });
       const data = await res.json();
       if (data.error) setMessage(data.error);
-      else setFlights([...flights, data.trip?.flight]);
+      else {
+        setFlights([...flights, data.trip?.flight]);
+        setShowAddForm(false);
+        setNewFlight({ airline: "", flightNumber: "", departure: "", arrival: "", booked: false });
+      }
     } catch (err: any) {
       setMessage(err instanceof Error ? err.message : String(err));
     }
   };
 
-  const updateFlight = async (index: number, field: string, value: any) => {
+  const updateFlight = async (index: number, field: keyof Flight, value: any) => {
     const updated = [...flights];
-    updated[index][field] = value;
+    (updated[index] as any)[field] = value;
     setFlights(updated);
 
-    const flightId = updated[index].id;
+    const flightId = updated[index]._id;
     if (!flightId) return;
 
     try {
-      const res = await fetch(
-        buildPath(`edit-flight/${userId}/${tripId}/${flightId}`),
-        {
-          method: "POST",
-          body: JSON.stringify(updated[index]),
-          headers: { "Content-Type": "application/json" },
-        }
-      );
+      const res = await fetch(buildPath(`edit-flight/${userId}/${tripId}/${flightId}`), {
+        method: "POST",
+        body: JSON.stringify(updated[index]),
+        headers: { "Content-Type": "application/json" },
+      });
       const data = await res.json();
       if (data.error) setMessage(data.error);
     } catch (err: any) {
@@ -80,16 +92,13 @@ function TripFlight({ tripId }: TripFlightProps) {
   };
 
   const deleteFlight = async (index: number) => {
-    const flightId = flights[index].id;
+    const flightId = flights[index]._id;
     if (!flightId) return;
 
     try {
-      const res = await fetch(
-        buildPath(`delete-flight/${userId}/${tripId}/${flightId}`),
-        {
-          method: "DELETE",
-        }
-      );
+      const res = await fetch(buildPath(`delete-flight/${userId}/${tripId}/${flightId}`), {
+        method: "DELETE",
+      });
       const data = await res.json();
       if (data.error) setMessage(data.error);
       else setFlights(flights.filter((_, i) => i !== index));
@@ -101,12 +110,49 @@ function TripFlight({ tripId }: TripFlightProps) {
 
   return (
     <div className="tab-section">
-      <button className="add-btn" onClick={addFlight}>
+      <button className="add-btn" onClick={() => setShowAddForm(true)}>
         + Add Flight
       </button>
 
+      {showAddForm && (
+        <div className="add-flight-form card">
+          <input
+            placeholder="Airline"
+            value={newFlight.airline}
+            onChange={(e) => setNewFlight({ ...newFlight, airline: e.target.value })}
+          />
+          <input
+            placeholder="Flight Number"
+            value={newFlight.flightNumber}
+            onChange={(e) => setNewFlight({ ...newFlight, flightNumber: e.target.value })}
+          />
+          <input
+            type="datetime-local"
+            value={newFlight.departure}
+            onChange={(e) => setNewFlight({ ...newFlight, departure: e.target.value })}
+          />
+          <input
+            type="datetime-local"
+            value={newFlight.arrival}
+            onChange={(e) => setNewFlight({ ...newFlight, arrival: e.target.value })}
+          />
+          <label>
+            <input
+              type="checkbox"
+              checked={newFlight.booked}
+              onChange={(e) => setNewFlight({ ...newFlight, booked: e.target.checked })}
+            />
+            Booked
+          </label>
+          <div className="form-buttons">
+            <button className="save-btn" onClick={saveNewFlight}>Save Flight</button>
+            <button onClick={() => setShowAddForm(false)}>Cancel</button>
+          </div>
+        </div>
+      )}
+
       {flights.map((f, i) => (
-        <div key={i} className="flight-item">
+        <div key={i} className="flight-item card">
           <input
             value={f.airline}
             placeholder="Airline"
@@ -119,16 +165,12 @@ function TripFlight({ tripId }: TripFlightProps) {
           />
           <input
             type="datetime-local"
-            value={
-              f.departure ? new Date(f.departure).toISOString().slice(0, 16) : ""
-            }
+            value={f.departure ? new Date(f.departure).toISOString().slice(0, 16) : ""}
             onChange={(e) => updateFlight(i, "departure", e.target.value)}
           />
           <input
             type="datetime-local"
-            value={
-              f.arrival ? new Date(f.arrival).toISOString().slice(0, 16) : ""
-            }
+            value={f.arrival ? new Date(f.arrival).toISOString().slice(0, 16) : ""}
             onChange={(e) => updateFlight(i, "arrival", e.target.value)}
           />
           <label>

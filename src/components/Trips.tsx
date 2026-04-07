@@ -140,8 +140,6 @@ function Trips() {
           >
             <strong>{c.name}</strong>
             <br />
-            {c._id}
-            <br />
             {c.destination}
             <br />
             {c.startDate} {c.endDate ? `- ${c.endDate}` : ''}
