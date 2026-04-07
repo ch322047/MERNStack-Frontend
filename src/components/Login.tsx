@@ -128,7 +128,7 @@ function Auth() {
         method: 'POST',
         body: JSON.stringify({
           login: registerLogin,
-          email: email,
+          email,
         }),
         headers: { 'Content-Type': 'application.json' },
       });
