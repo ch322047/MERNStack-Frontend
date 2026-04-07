@@ -106,11 +106,8 @@ function Auth() {
       const response = await fetch(buildPath('resend-verification-email'), {
         method: 'POST',
         body: JSON.stringify({
-          firstName,
-          lastName,
           login: registerLogin,
           email: email,
-          password: registerPassword,
         }),
         headers: { 'Content-Type': 'application.json' },
       });
