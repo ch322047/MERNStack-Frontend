@@ -110,7 +110,7 @@ function Auth() {
           lastName,
           login: registerLogin,
           email: email,
-          password,
+          password: registerPassword,
         }),
         headers: { 'Content-Type': 'application.json' },
       });
