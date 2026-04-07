@@ -5,9 +5,10 @@ import { useNavigate } from 'react-router-dom';
 function Trips() {
   const navigate = useNavigate();
 
+  // Get user from localStorage
   const stored = localStorage.getItem('user_data');
-  const ud = stored && stored !== "undefined" ? JSON.parse(stored) : { id: -1 };
-  const userId: string = ud.id;
+  const user = stored ? JSON.parse(stored) : null;
+  const userId = user?.id;
 
   const [message, setMessage] = useState('');
   const [search, setSearchValue] = useState('');
@@ -21,8 +22,17 @@ function Trips() {
   const [endDate, setEndDate] = useState('');
   const [status, setStatus] = useState('planning');
 
-  // Fetch all trips on page load & whenever userId changes
+  // Redirect to login if not logged in
   useEffect(() => {
+    if (!userId) {
+      navigate('/login');
+    }
+  }, [userId, navigate]);
+
+  // Fetch all trips
+  useEffect(() => {
+    if (!userId) return;
+
     async function fetchAllTrips() {
       try {
         const response = await fetch(
@@ -47,6 +57,11 @@ function Trips() {
 
   // Add new trip
   async function handleAddTrip() {
+    if (!userId) {
+      setMessage('You must be logged in.');
+      return;
+    }
+
     if (!name || !destination || !startDate) {
       setMessage('Please fill in Name, Destination, and Start Date');
       return;
@@ -67,7 +82,7 @@ function Trips() {
 
       if (res.error && res.error.length > 0) {
         setMessage('API Error: ' + res.error);
-      } else {
+      } else if (res.tripId) {
         setMessage('Trip added successfully');
         setShowNewTripForm(false);
         setName('');
@@ -76,15 +91,15 @@ function Trips() {
         setEndDate('');
         setStatus('planning');
 
-        // redirect to trip details page using returned tripId
         navigate(`/trip/${res.tripId}`);
+      } else {
+        setMessage('Trip created but no ID returned.');
       }
     } catch (error: any) {
       setMessage(error.toString());
     }
   }
 
-  // Optional: live search client-side filtering
   const filteredCards = search
     ? cards.filter((c) =>
         c.name.toLowerCase().includes(search.toLowerCase())
