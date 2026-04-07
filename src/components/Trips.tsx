@@ -80,9 +80,21 @@ function Trips() {
       );
       const res = await response.json();
 
-      if (res.error && res.error.length > 0) {
+        if (res.error && res.error.length > 0) {
         setMessage('API Error: ' + res.error);
-      } else if (res.tripId) {
+        } else if (res.tripId) {
+        // Trip created successfully
+        const newTrip = {
+            id: res.tripId,
+            name,
+            destination,
+            startDate,
+            endDate,
+            status,
+        };
+
+        // Add to current cards so it shows up in the list
+        setCards((prev) => [...prev, newTrip]);
         setMessage('Trip added successfully');
         setShowNewTripForm(false);
         setName('');
