@@ -40,7 +40,7 @@ function TripFlight({ tripId }: TripFlightProps) {
         const res = await fetch(buildPath(`get-trip/${tripId}`));
         const data = await res.json();
         if (data.error) setMessage(data.error);
-        else setFlights(data.trip?.flights || []);
+        else setFlights((data.trip?.flights || []).filter((f: any) => f));
       } catch (err: any) {
         console.error(err);
         setMessage("Failed to load flights.");
@@ -60,7 +60,7 @@ function TripFlight({ tripId }: TripFlightProps) {
       const data = await res.json();
       if (data.error) setMessage(data.error);
       else {
-        setFlights([...flights, data.trip?.flight]);
+        setFlights([...flights, data.flight]);
         setShowAddForm(false);
         setNewFlight({ airline: "", flightNumber: "", departure: "", arrival: "", booked: false });
       }
@@ -154,12 +154,12 @@ function TripFlight({ tripId }: TripFlightProps) {
       {flights.map((f, i) => (
         <div key={i} className="flight-item card">
           <input
-            value={f.airline}
+            value={f.airline || ""}
             placeholder="Airline"
             onChange={(e) => updateFlight(i, "airline", e.target.value)}
           />
           <input
-            value={f.flightNumber}
+            value={f.flightNumber || ""}
             placeholder="Flight Number"
             onChange={(e) => updateFlight(i, "flightNumber", e.target.value)}
           />
