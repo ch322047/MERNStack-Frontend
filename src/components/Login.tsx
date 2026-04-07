@@ -87,13 +87,54 @@ function Auth() {
       } else {
         localStorage.setItem('user_data', JSON.stringify(res.user));
         setMessage('Registration successful! Check your email.');
-        setTimeout(() => setIsLoginTab(true), 2000);
+
+        
+        
+        //setTimeout(() => setIsLoginTab(true), 2000); // This takes the user back to the login page
       }
     } catch (err: any) {
       setMessage(err.toString());
     }
   }
 
+  // sends the username and email to the backend, triggering a resent email
+  async function resendEmail(e: React.FormEvent) {
+    e.preventDefault();
+    setMessage('');
+
+    try {
+      const response = await fetch(buildPath('resend-verification-email'), {
+        method: 'POST',
+        body: JSON.stringify({
+          login: registerLogin,
+          email: email,
+        }),
+        headers: { 'Content-Type': 'application.json' },
+      });
+
+      let res;
+      try {
+        res = await response.json()
+      } catch (err) {
+        console.error('Failed to parse JSON.');
+        setMessage('Server error: see console');
+        return;
+      }
+
+      if (res.error) {
+        setMessage(res.error);
+      } else {
+        //localStorage.setItem('user_data', JSON.stringify(res.user));
+        setMessage('Email Resent! Check your email.');
+      }
+        
+      
+    } catch (err: any) {
+      setMessage(err.toString());
+    }
+  }
+
+  
   return (
     <div className="auth-container">
       <div className="auth-box">
@@ -170,7 +211,9 @@ function Auth() {
             />
 
             <button type="submit">Register</button>
+            <button onClick={(e) => resendEmail(e)}>Resend Email</button>
           </form>
+      
         )}
 
         <p className="message">{message}</p>
