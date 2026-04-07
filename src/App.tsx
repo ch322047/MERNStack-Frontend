@@ -3,14 +3,14 @@ import { BrowserRouter as Router, Route, Navigate, Routes } from 'react-router-d
 import './App.css';
 
 import LoginPage from './pages/LoginPage';
-import CardPage from './pages/CardPage';
+import TripPage from './pages/TripPage';
 
 function App() {
   return (
     <Router >
       <Routes>
         <Route path="/" element={<LoginPage/>}/>
-        <Route path="/cards" element={<CardPage/>}/>
+        <Route path="/trips" element={<TripPage/>}/>
         <Route path="*" element={<Navigate to="/" replace />}/>
       </Routes>  
     </Router>

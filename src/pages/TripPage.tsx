@@ -1,15 +1,15 @@
 import PageTitle from '../components/PageTitle';
 //import LoggedInName from '../components/LoggedInName';
-import Cards from '../components/Cards';
+import Trips from '../components/Trips';
 
-const CardPage = () =>
+const TripPage = () =>
 {
     return(
         <div>
             <PageTitle />
-            <Cards />
+            <Trips />
         </div>
     );
 }
 
-export default CardPage;
+export default TripPage;
