@@ -47,7 +47,7 @@ function Auth() {
         setMessage(res.error);
       } else {
         localStorage.setItem('user_data', JSON.stringify(res.user));
-        navigate('/cards');
+        navigate('/trips');
       }
     } catch (err: any) {
       setMessage(err.toString());
