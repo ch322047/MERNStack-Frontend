@@ -12,6 +12,9 @@ function Auth() {
   const [loginName, setLoginName] = useState('');
   const [loginPassword, setLoginPassword] = useState('');
 
+  const [loginCode, setLoginCode] = useState('');
+  const [showCodeInput, setShowCodeInput] = useState(false);
+
   // Register
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
@@ -34,27 +37,45 @@ function Auth() {
         headers: { 'Content-Type': 'application/json' },
       });
 
-      let res;
-      try {
-        res = await response.json()
-      } catch (err) {
-        console.error('Failed to parse JSON.');
-        setMessage('Server error: see console');
-        return;
-      }
+      const res = await response.json();
 
       if (res.error) {
         setMessage(res.error);
       } else {
-        localStorage.setItem('user_data', JSON.stringify(res.user));
-        navigate('/trips');
+        // Login code sent successfully
+        setMessage('Login code sent to your email. Enter it below to continue.');
+        setShowCodeInput(true);
       }
     } catch (err: any) {
       setMessage(err.toString());
     }
   }
 
+  async function verifyLoginCode(e: React.FormEvent) {
+    e.preventDefault();
+    setMessage('');
 
+    try {
+      const response = await fetch(buildPath('verify-login-code'), {
+        method: 'POST',
+        body: JSON.stringify({ login: loginName, code: loginCode }),
+        headers: { 'Content-Type': 'application/json' },
+      });
+
+      const res = await response.json();
+
+      if (res.error) {
+        setMessage(res.error);
+      } else {
+        // Store user info & token
+        localStorage.setItem('user_data', JSON.stringify(res.user));
+        localStorage.setItem('token', res.token);
+        navigate('/trips');
+      }
+    } catch (err: any) {
+      setMessage(err.toString());
+    }
+  }
 
   async function doRegister(e: React.FormEvent) {
     e.preventDefault();
@@ -156,23 +177,37 @@ function Auth() {
         <h1>{isLoginTab ? 'Login' : 'Register'}</h1>
 
         {isLoginTab ? (
-          <form onSubmit={doLogin}>
-            <input
-              type="text"
-              placeholder="Username"
-              value={loginName}
-              onChange={(e) => setLoginName(e.target.value)}
-            />
+          <>
+            {!showCodeInput ? (
+              <form onSubmit={doLogin}>
+                <input
+                  type="text"
+                  placeholder="Username"
+                  value={loginName}
+                  onChange={(e) => setLoginName(e.target.value)}
+                />
 
-            <input
-              type="password"
-              placeholder="Password"
-              value={loginPassword}
-              onChange={(e) => setLoginPassword(e.target.value)}
-            />
+                <input
+                  type="password"
+                  placeholder="Password"
+                  value={loginPassword}
+                  onChange={(e) => setLoginPassword(e.target.value)}
+                />
 
-            <button type="submit">Login</button>
-          </form>
+                <button type="submit">Login</button>
+              </form>
+            ) : (
+              <form onSubmit={verifyLoginCode}>
+                <input
+                  type="text"
+                  placeholder="Enter code from email"
+                  value={loginCode}
+                  onChange={(e) => setLoginCode(e.target.value)}
+                />
+                <button type="submit">Verify Code</button>
+              </form>
+            )}
+          </>
         ) : (
           <form onSubmit={doRegister}>
             <input
