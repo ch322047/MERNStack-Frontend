@@ -99,7 +99,6 @@ function Auth() {
 
   // sends the username and email to the backend, triggering a resent email
   async function resendEmail() {
-    e.preventDefault();
     setMessage('');
 
     try {
@@ -112,7 +111,22 @@ function Auth() {
         headers: { 'Content-Type': 'application.json' },
       });
 
-    alert("email resent!");
+      let res;
+      try {
+        res = await response.json()
+      } catch (err) {
+        console.error('Failed to parse JSON.');
+        setMessage('Server error: see console');
+        return;
+      }
+
+      if (res.error) {
+        setMessage(res.error);
+      } else {
+        //localStorage.setItem('user_data', JSON.stringify(res.user));
+        setMessage('Email Resent! Check your email.');
+      }
+        
       
     } catch (err: any) {
       setMessage(err.toString());
