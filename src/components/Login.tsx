@@ -98,7 +98,8 @@ function Auth() {
   }
 
   // sends the username and email to the backend, triggering a resent email
-  async function resendEmail() {
+  async function resendEmail(e: React.FormEvent) {
+    e.preventDefault();
     setMessage('');
 
     try {
