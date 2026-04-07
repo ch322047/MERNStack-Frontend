@@ -91,7 +91,6 @@ function Trips() {
         setEndDate('');
         setStatus('planning');
 
-        navigate(`/trip/${res.tripId}`);
       } else {
         setMessage('Trip created but no ID returned.');
       }
@@ -128,6 +127,8 @@ function Trips() {
             onClick={() => navigate(`/trip/${c.id}`)}
           >
             <strong>{c.name}</strong>
+            <br />
+            {c.id}
             <br />
             {c.destination}
             <br />
