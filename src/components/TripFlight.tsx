@@ -22,7 +22,7 @@ function TripFlight({ tripId }: TripFlightProps) {
         const res = await fetch(buildPath(`get-trip/${tripId}`));
         const data = await res.json();
         if (data.error) setMessage(data.error);
-        else setFlights(data.flights || []);
+        else setFlights(data.trip?.flights || []);
       } catch (err: any) {
         console.error(err);
         setMessage("Failed to load flights.");
@@ -48,7 +48,7 @@ function TripFlight({ tripId }: TripFlightProps) {
       });
       const data = await res.json();
       if (data.error) setMessage(data.error);
-      else setFlights([...flights, data.flight]);
+      else setFlights([...flights, data.trip?.flight]);
     } catch (err: any) {
       setMessage(err instanceof Error ? err.message : String(err));
     }

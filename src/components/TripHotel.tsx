@@ -22,7 +22,7 @@ function TripHotel({ tripId }: TripHotelProps) {
         const res = await fetch(buildPath(`get-trip/${tripId}`));
         const data = await res.json();
         if (data.error) setMessage(data.error);
-        else setHotels(data.hotels || []);
+        else setHotels(data.trip?.hotels || []);
       } catch (err: any) {
         console.error(err);
         setMessage("Failed to load hotels.");

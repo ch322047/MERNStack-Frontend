@@ -29,7 +29,7 @@ function TripDetailsPage() {
           setMessage(data.error);
           setTripName("");
         } else {
-          setTripName(data.name || "Unnamed Trip");
+          setTripName(data.trip?.name || "Unnamed Trip");
         }
       } catch (err: any) {
         console.error(err);
@@ -41,6 +41,8 @@ function TripDetailsPage() {
   }, [tripId]);
 
   const renderActiveTab = () => {
+    if (!tripId) return <p>Loading Trip...</p>;
+    
     switch (activeTab) {
       case "Flights":
         return <TripFlight tripId={tripId} />;

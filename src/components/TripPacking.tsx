@@ -28,7 +28,7 @@ function TripPacking({ tripId }: TripPackingProps) {
       try {
         const res = await fetch(buildPath(`get-trip/${tripId}`));
         const data = await res.json();
-        setItems(data.packingList || []);
+        setItems(data.trip?.packingList || []);
       } catch (err: any) {
         console.error(err);
         setMessage("Failed to load packing list");

@@ -37,7 +37,7 @@ function TripItinerary({ tripId }: TripItineraryProps) {
         const res = await fetch(buildPath(`get-trip/${tripId}`));
         const data = await res.json();
         if (data.error) setMessage(data.error);
-        else setItinerary(data.itinerary || []);
+        else setItinerary(data.trip?.itinerary || []);
       } catch (err: any) {
         setMessage("Failed to load itinerary.");
         console.error(err);
