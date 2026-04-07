@@ -211,7 +211,7 @@ function Auth() {
             />
 
             <button type="submit">Register</button>
-            <button onClick={(e) => resendEmail(e.target.value)}>Resend Email</button>
+            <button onClick={(e) => resendEmail(e)}>Resend Email</button>
           </form>
       
         )}
