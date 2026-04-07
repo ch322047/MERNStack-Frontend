@@ -87,13 +87,39 @@ function Auth() {
       } else {
         localStorage.setItem('user_data', JSON.stringify(res.user));
         setMessage('Registration successful! Check your email.');
-        setTimeout(() => setIsLoginTab(true), 2000);
+
+        
+        
+        //setTimeout(() => setIsLoginTab(true), 2000); // This takes the user back to the login page
       }
     } catch (err: any) {
       setMessage(err.toString());
     }
   }
 
+  // sends the username and email to the backend, triggering a resent email
+  async function resendEmail() {
+    e.preventDefault();
+    setMessage('');
+
+    try {
+      const response = await fetch(buildPath('resend-verification-email'), {
+        method: 'POST',
+        body: JSON.stringify({
+          login: registerLogin,
+          email: email,
+        }),
+        headers: { 'Content-Type': 'application.json' },
+      });
+
+    alert("email resent!");
+      
+    } catch (err: any) {
+      setMessage(err.toString());
+    }
+  }
+
+  
   return (
     <div className="auth-container">
       <div className="auth-box">
@@ -171,6 +197,8 @@ function Auth() {
 
             <button type="submit">Register</button>
           </form>
+          <button onClick={() => resendEmail()}>Resend Email</button>
+      
         )}
 
         <p className="message">{message}</p>
