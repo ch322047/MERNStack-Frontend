@@ -5,36 +5,52 @@ interface TripFlightProps {
 }
 
 function TripFlight({ tripId }: TripFlightProps) {
+  const stored = localStorage.getItem("user_data");
+  const ud = stored && stored !== "undefined" ? JSON.parse(stored) : { id: -1 };
+  const userId: string = ud.id;
+
   const [flights, setFlights] = useState<any[]>([]);
   const [message, setMessage] = useState("");
 
-  // Fetch flights for this trip
+  const buildPath = (route: string) =>
+    `https://lampstackprojectgroup9.com/api/${route}`;
+
+  // Fetch flights from trip
   useEffect(() => {
     async function fetchFlights() {
       try {
-        const res = await fetch(`https://lampstackprojectgroup9.com/api/gettrip?tripId=${tripId}`);
+        const res = await fetch(buildPath(`get-trip/${tripId}`));
         const data = await res.json();
-        setFlights(data.flights || []);
-      } catch (err) {
+        if (data.error) setMessage(data.error);
+        else setFlights(data.flights || []);
+      } catch (err: any) {
         console.error(err);
+        setMessage("Failed to load flights.");
       }
     }
     fetchFlights();
   }, [tripId]);
 
   const addFlight = async () => {
-    const newFlight = { tripId, airline: "", flightNumber: "", departure: "", arrival: "", booked: false };
+    const newFlight = {
+      airline: "",
+      flightNumber: "",
+      departure: "",
+      arrival: "",
+      booked: false,
+    };
+
     try {
-      const res = await fetch("https://lampstackprojectgroup9.com/api/addflight", {
+      const res = await fetch(buildPath(`add-flight/${userId}/${tripId}`), {
         method: "POST",
         body: JSON.stringify(newFlight),
         headers: { "Content-Type": "application/json" },
       });
       const data = await res.json();
-      if (!data.error) setFlights([...flights, data.flight]);
-      else setMessage(data.error);
-    } catch (err: unknown) {
-    setMessage(err instanceof Error ? err.message : String(err));
+      if (data.error) setMessage(data.error);
+      else setFlights([...flights, data.flight]);
+    } catch (err: any) {
+      setMessage(err instanceof Error ? err.message : String(err));
     }
   };
 
@@ -42,20 +58,53 @@ function TripFlight({ tripId }: TripFlightProps) {
     const updated = [...flights];
     updated[index][field] = value;
     setFlights(updated);
+
+    const flightId = updated[index].id;
+    if (!flightId) return;
+
     try {
-      await fetch("https://lampstackprojectgroup9.com/api/updateflight", {
-        method: "POST",
-        body: JSON.stringify(updated[index]),
-        headers: { "Content-Type": "application/json" },
-      });
-    } catch (err) {
+      const res = await fetch(
+        buildPath(`edit-flight/${userId}/${tripId}/${flightId}`),
+        {
+          method: "POST",
+          body: JSON.stringify(updated[index]),
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+      const data = await res.json();
+      if (data.error) setMessage(data.error);
+    } catch (err: any) {
       console.error(err);
+      setMessage("Failed to update flight.");
+    }
+  };
+
+  const deleteFlight = async (index: number) => {
+    const flightId = flights[index].id;
+    if (!flightId) return;
+
+    try {
+      const res = await fetch(
+        buildPath(`delete-flight/${userId}/${tripId}/${flightId}`),
+        {
+          method: "DELETE",
+        }
+      );
+      const data = await res.json();
+      if (data.error) setMessage(data.error);
+      else setFlights(flights.filter((_, i) => i !== index));
+    } catch (err: any) {
+      console.error(err);
+      setMessage("Failed to delete flight.");
     }
   };
 
   return (
     <div className="tab-section">
-      <button onClick={addFlight}>+ Add Flight</button>
+      <button className="add-btn" onClick={addFlight}>
+        + Add Flight
+      </button>
+
       {flights.map((f, i) => (
         <div key={i} className="flight-item">
           <input
@@ -70,12 +119,16 @@ function TripFlight({ tripId }: TripFlightProps) {
           />
           <input
             type="datetime-local"
-            value={f.departure ? new Date(f.departure).toISOString().slice(0, 16) : ""}
+            value={
+              f.departure ? new Date(f.departure).toISOString().slice(0, 16) : ""
+            }
             onChange={(e) => updateFlight(i, "departure", e.target.value)}
           />
           <input
             type="datetime-local"
-            value={f.arrival ? new Date(f.arrival).toISOString().slice(0, 16) : ""}
+            value={
+              f.arrival ? new Date(f.arrival).toISOString().slice(0, 16) : ""
+            }
             onChange={(e) => updateFlight(i, "arrival", e.target.value)}
           />
           <label>
@@ -86,9 +139,13 @@ function TripFlight({ tripId }: TripFlightProps) {
             />
             Booked
           </label>
+          <button className="delete-btn" onClick={() => deleteFlight(i)}>
+            Delete
+          </button>
         </div>
       ))}
-      <p>{message}</p>
+
+      {message && <p className="message">{message}</p>}
     </div>
   );
 }

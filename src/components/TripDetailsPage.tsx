@@ -10,28 +10,36 @@ function TripDetailsPage() {
   const { tripId } = useParams<{ tripId: string }>();
   const [tripName, setTripName] = useState("");
   const [activeTab, setActiveTab] = useState("Flights");
+  const [message, setMessage] = useState("");
 
   // Early return if tripId is missing
-  if (!tripId) return <div>Error: No trip selected.</div>;
+  if (!tripId) return <div className="message">Error: No trip selected.</div>;
 
-  // Fetch trip info (name, etc.) on mount
+  // Fetch trip info on mount
   useEffect(() => {
     async function fetchTrip() {
       try {
-        const res = await fetch(
-          `https://lampstackprojectgroup9.com/api/gettrip?tripId=${tripId}`
+        const response = await fetch(
+          `https://lampstackprojectgroup9.com/api/get-trip/${tripId}`
         );
-        const data = await res.json();
-        setTripName(data.name);
-      } catch (err) {
+        const data = await response.json();
+
+        if (data.error) {
+          setMessage(data.error);
+          setTripName("");
+        } else {
+          setTripName(data.name || "Unnamed Trip");
+        }
+      } catch (err: any) {
         console.error(err);
+        setMessage("Failed to fetch trip details.");
       }
     }
+
     fetchTrip();
   }, [tripId]);
 
   const renderActiveTab = () => {
-    // Now tripId is guaranteed to exist, so no TS error
     switch (activeTab) {
       case "Flights":
         return <TripFlight tripId={tripId} />;
@@ -49,11 +57,11 @@ function TripDetailsPage() {
   return (
     <div className="trip-details-page">
       <aside className="trip-sidebar">
-        <h2>{tripName}</h2>
+        <h2 className="trip-title">{tripName || "Loading..."}</h2>
         {["Flights", "Hotels", "Itinerary", "Packing List"].map((tab) => (
           <button
             key={tab}
-            className={activeTab === tab ? "active-tab" : ""}
+            className={`sidebar-btn ${activeTab === tab ? "active-tab" : ""}`}
             onClick={() => setActiveTab(tab)}
           >
             {tab}
@@ -61,7 +69,10 @@ function TripDetailsPage() {
         ))}
       </aside>
 
-      <main className="trip-content">{renderActiveTab()}</main>
+      <main className="trip-content">
+        {message && <p className="message">{message}</p>}
+        {renderActiveTab()}
+      </main>
     </div>
   );
 }

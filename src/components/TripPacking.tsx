@@ -1,49 +1,122 @@
 import { useState, useEffect } from "react";
+import "../index.css";
+
+interface PackingItem {
+  _id?: string;
+  item: string;
+  packed: boolean;
+}
 
 interface TripPackingProps {
   tripId: string;
 }
 
 function TripPacking({ tripId }: TripPackingProps) {
-  const [items, setItems] = useState<any[]>([]);
+  const [items, setItems] = useState<PackingItem[]>([]);
   const [message, setMessage] = useState("");
 
+  const stored = localStorage.getItem("user_data");
+  const ud = stored && stored !== "undefined" ? JSON.parse(stored) : { id: -1 };
+  const userId: string = ud.id;
+
+  const buildPath = (route: string) =>
+    `https://lampstackprojectgroup9.com/api/${route}`;
+
+  // Fetch packing list on mount
   useEffect(() => {
     async function fetchPackingList() {
       try {
-        const res = await fetch(`https://lampstackprojectgroup9.com/api/gettrip?tripId=${tripId}`);
+        const res = await fetch(buildPath(`get-trip/${tripId}`));
         const data = await res.json();
         setItems(data.packingList || []);
-      } catch (err) {
+      } catch (err: any) {
         console.error(err);
+        setMessage("Failed to load packing list");
       }
     }
     fetchPackingList();
   }, [tripId]);
 
+  // Add new item
   const addItem = async () => {
-    const newItem = { tripId, item: "", packed: false };
-    setItems([...items, newItem]);
+    const newItem: PackingItem = { item: "", packed: false };
+    try {
+      const res = await fetch(
+        buildPath(`add-to-packing-list/${userId}/${tripId}`),
+        {
+          method: "POST",
+          body: JSON.stringify(newItem),
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+      const data = await res.json();
+      if (data.error) setMessage(data.error);
+      else {
+        setItems([...items, data.item]);
+        setMessage(data.message || "Item added");
+      }
+    } catch (err: any) {
+      console.error(err);
+      setMessage("Network error");
+    }
   };
 
-  const updateItem = async (index: number, field: string, value: any) => {
+  // Update item
+  const updateItem = async (index: number, field: keyof PackingItem, value: any) => {
     const updated = [...items];
-    updated[index][field] = value;
+    (updated[index] as any)[field] = value;
     setItems(updated);
+
+    const itemId = updated[index]._id;
+    if (!itemId) return;
+
     try {
-      await fetch("https://lampstackprojectgroup9.com/api/updatepackingitem", {
-        method: "POST",
-        body: JSON.stringify(updated[index]),
-        headers: { "Content-Type": "application/json" },
-      });
-    } catch (err) {
+      const res = await fetch(
+        buildPath(`edit-packing-list/${userId}/${tripId}/${itemId}`),
+        {
+          method: "PUT",
+          body: JSON.stringify({ [field]: value }),
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+      const data = await res.json();
+      if (data.error) setMessage(data.error);
+      else setMessage(data.message || "Item updated");
+    } catch (err: any) {
       console.error(err);
+      setMessage("Network error");
+    }
+  };
+
+  // Delete item
+  const deleteItem = async (index: number) => {
+    const updated = [...items];
+    const itemId = updated[index]._id;
+    if (!itemId) return;
+
+    try {
+      const res = await fetch(
+        buildPath(`delete-packing-list/${userId}/${tripId}/${itemId}`),
+        { method: "DELETE" }
+      );
+      const data = await res.json();
+      if (data.error) setMessage(data.error);
+      else {
+        updated.splice(index, 1);
+        setItems(updated);
+        setMessage(data.message || "Item deleted");
+      }
+    } catch (err: any) {
+      console.error(err);
+      setMessage("Network error");
     }
   };
 
   return (
     <div className="tab-section">
-      <button onClick={addItem}>+ Add Item</button>
+      <button className="add-btn" onClick={addItem}>
+        + Add Item
+      </button>
       {items.map((i, idx) => (
         <div key={idx} className="packing-item">
           <input
@@ -59,9 +132,12 @@ function TripPacking({ tripId }: TripPackingProps) {
             />
             Packed
           </label>
+          <button className="delete-btn" onClick={() => deleteItem(idx)}>
+            Delete
+          </button>
         </div>
       ))}
-      <p>{message}</p>
+      {message && <p className="message">{message}</p>}
     </div>
   );
 }

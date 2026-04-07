@@ -5,35 +5,46 @@ interface TripHotelProps {
 }
 
 function TripHotel({ tripId }: TripHotelProps) {
+  const stored = localStorage.getItem("user_data");
+  const ud = stored && stored !== "undefined" ? JSON.parse(stored) : { id: -1 };
+  const userId: string = ud.id;
+
   const [hotels, setHotels] = useState<any[]>([]);
   const [message, setMessage] = useState("");
 
+  const buildPath = (route: string) =>
+    `https://lampstackprojectgroup9.com/api/${route}`;
+
+  // Fetch hotels from trip
   useEffect(() => {
     async function fetchHotels() {
       try {
-        const res = await fetch(`https://lampstackprojectgroup9.com/api/gettrip?tripId=${tripId}`);
+        const res = await fetch(buildPath(`get-trip/${tripId}`));
         const data = await res.json();
-        setHotels(data.hotels || []);
-      } catch (err) {
+        if (data.error) setMessage(data.error);
+        else setHotels(data.hotels || []);
+      } catch (err: any) {
         console.error(err);
+        setMessage("Failed to load hotels.");
       }
     }
     fetchHotels();
   }, [tripId]);
 
   const addHotel = async () => {
-    const newHotel = { tripId, name: "", checkIn: "", checkOut: "", booked: false };
+    const newHotel = { name: "", checkIn: "", checkOut: "", booked: false };
+
     try {
-      const res = await fetch("https://lampstackprojectgroup9.com/api/addhotel", {
+      const res = await fetch(buildPath(`add-hotel/${userId}/${tripId}`), {
         method: "POST",
         body: JSON.stringify(newHotel),
         headers: { "Content-Type": "application/json" },
       });
       const data = await res.json();
-      if (!data.error) setHotels([...hotels, data.hotel]);
-      else setMessage(data.error);
-    } catch (err: unknown) {
-        setMessage(err instanceof Error ? err.message : String(err));
+      if (data.error) setMessage(data.error);
+      else setHotels([...hotels, data.hotel]);
+    } catch (err: any) {
+      setMessage(err instanceof Error ? err.message : String(err));
     }
   };
 
@@ -41,20 +52,51 @@ function TripHotel({ tripId }: TripHotelProps) {
     const updated = [...hotels];
     updated[index][field] = value;
     setHotels(updated);
+
+    const hotelId = updated[index].id;
+    if (!hotelId) return;
+
     try {
-      await fetch("https://lampstackprojectgroup9.com/api/updatehotel", {
-        method: "POST",
-        body: JSON.stringify(updated[index]),
-        headers: { "Content-Type": "application/json" },
-      });
-    } catch (err) {
+      const res = await fetch(
+        buildPath(`edit-hotel/${userId}/${tripId}/${hotelId}`),
+        {
+          method: "POST",
+          body: JSON.stringify(updated[index]),
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+      const data = await res.json();
+      if (data.error) setMessage(data.error);
+    } catch (err: any) {
       console.error(err);
+      setMessage("Failed to update hotel.");
+    }
+  };
+
+  const deleteHotel = async (index: number) => {
+    const hotelId = hotels[index].id;
+    if (!hotelId) return;
+
+    try {
+      const res = await fetch(
+        buildPath(`delete-hotel/${userId}/${tripId}/${hotelId}`),
+        { method: "DELETE" }
+      );
+      const data = await res.json();
+      if (data.error) setMessage(data.error);
+      else setHotels(hotels.filter((_, i) => i !== index));
+    } catch (err: any) {
+      console.error(err);
+      setMessage("Failed to delete hotel.");
     }
   };
 
   return (
     <div className="tab-section">
-      <button onClick={addHotel}>+ Add Hotel</button>
+      <button className="add-btn" onClick={addHotel}>
+        + Add Hotel
+      </button>
+
       {hotels.map((h, i) => (
         <div key={i} className="hotel-item">
           <input
@@ -80,9 +122,13 @@ function TripHotel({ tripId }: TripHotelProps) {
             />
             Booked
           </label>
+          <button className="delete-btn" onClick={() => deleteHotel(i)}>
+            Delete
+          </button>
         </div>
       ))}
-      <p>{message}</p>
+
+      {message && <p className="message">{message}</p>}
     </div>
   );
 }

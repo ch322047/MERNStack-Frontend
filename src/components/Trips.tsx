@@ -4,9 +4,6 @@ import { useNavigate } from 'react-router-dom';
 
 function Trips() {
   const navigate = useNavigate();
-  function buildPath(route: string): string {
-    return `https://lampstackprojectgroup9.com/api/${route}`;
-  }
 
   const stored = localStorage.getItem('user_data');
   const ud = stored && stored !== "undefined" ? JSON.parse(stored) : { id: -1 };
@@ -24,53 +21,61 @@ function Trips() {
   const [endDate, setEndDate] = useState('');
   const [status, setStatus] = useState('planning');
 
-  // live search
+  // Fetch all trips on page load & whenever userId changes
   useEffect(() => {
-    async function fetchCards() {
-      const obj = { userId, search };
-      const js = JSON.stringify(obj);
+    async function fetchAllTrips() {
       try {
-        const response = await fetch(buildPath('searchcards'), {
-          method: 'POST',
-          body: js,
-          headers: { 'Content-Type': 'application/json' },
-        });
+        const response = await fetch(
+          `https://lampstackprojectgroup9.com/api/get-all-trips/${userId}`
+        );
         const res = await response.json();
-        setCards(res.results || []);
+
+        if (res.error) {
+          setMessage(res.error);
+          setCards([]);
+        } else {
+          setCards(res.trips || []);
+        }
       } catch (error: any) {
         console.error(error);
+        setMessage('Failed to fetch trips.');
       }
     }
-    fetchCards();
-  }, [search]);
 
+    fetchAllTrips();
+  }, [userId]);
+
+  // Add new trip
   async function handleAddTrip() {
     if (!name || !destination || !startDate) {
       setMessage('Please fill in Name, Destination, and Start Date');
       return;
     }
 
-    const obj = { userId, name, destination, startDate, endDate, status };
-    const js = JSON.stringify(obj);
+    const obj = { name, destination, startDate, endDate, status };
 
     try {
-      const response = await fetch(buildPath('addcard'), {
-        method: 'POST',
-        body: js,
-        headers: { 'Content-Type': 'application/json' },
-      });
+      const response = await fetch(
+        `https://lampstackprojectgroup9.com/api/create-trip/${userId}`,
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(obj),
+        }
+      );
       const res = await response.json();
 
       if (res.error && res.error.length > 0) {
         setMessage('API Error: ' + res.error);
       } else {
-        setMessage('Trip added');
+        setMessage('Trip added successfully');
         setShowNewTripForm(false);
         setName('');
         setDestination('');
         setStartDate('');
         setEndDate('');
         setStatus('planning');
+
         // redirect to trip details page using returned tripId
         navigate(`/trip/${res.tripId}`);
       }
@@ -79,85 +84,95 @@ function Trips() {
     }
   }
 
-    return (
-    <div className="trip-create-container">
+  // Optional: live search client-side filtering
+  const filteredCards = search
+    ? cards.filter((c) =>
+        c.name.toLowerCase().includes(search.toLowerCase())
+      )
+    : cards;
 
-        <input
+  return (
+    <div className="trip-create-container">
+      <input
         className="trip-search"
         type="text"
         placeholder="Search Trips..."
         value={search}
         onChange={(e) => setSearchValue(e.target.value)}
-        />
+      />
 
-        <div className="trip-grid">
+      <div className="trip-grid">
         <div className="trip-card add-card" onClick={() => setShowNewTripForm(true)}>
-            + Add Trip
+          + Add Trip
         </div>
 
-        {cards.map((c: any, index: number) => (
-            <div
+        {filteredCards.map((c: any, index: number) => (
+          <div
             key={index}
             className="trip-card"
             onClick={() => navigate(`/trip/${c.id}`)}
-            >
+          >
             <strong>{c.name}</strong>
             <br />
             {c.destination}
             <br />
             {c.startDate} {c.endDate ? `- ${c.endDate}` : ''}
-            </div>
+          </div>
         ))}
-        </div>
+      </div>
 
-        {showNewTripForm && (
+      {showNewTripForm && (
         <div className="trip-section-container">
-            <input
+          <input
             type="text"
             placeholder="Trip Name"
             value={name}
             onChange={(e) => setName(e.target.value)}
             className="trip-search"
-            />
-            <input
+          />
+          <input
             type="text"
             placeholder="Destination"
             value={destination}
             onChange={(e) => setDestination(e.target.value)}
             className="trip-search"
-            />
-            <input
+          />
+          <input
             type="date"
             value={startDate}
             onChange={(e) => setStartDate(e.target.value)}
             className="trip-search"
-            />
-            <input
+          />
+          <input
             type="date"
             value={endDate}
             onChange={(e) => setEndDate(e.target.value)}
             className="trip-search"
-            />
-            <select
+          />
+          <select
             value={status}
             onChange={(e) => setStatus(e.target.value)}
             className="trip-search"
-            >
+          >
             <option value="planning">Planning</option>
             <option value="ready">Ready</option>
             <option value="active">Active</option>
             <option value="completed">Completed</option>
-            </select>
-            <div style={{ marginTop: '10px', display: 'flex', gap: '10px' }}>
-            <button className="add-btn" onClick={handleAddTrip}>Create Trip</button>
-            <button className="add-btn" onClick={() => setShowNewTripForm(false)}>Cancel</button>
-            </div>
+          </select>
+          <div style={{ marginTop: '10px', display: 'flex', gap: '10px' }}>
+            <button className="add-btn" onClick={handleAddTrip}>
+              Create Trip
+            </button>
+            <button className="add-btn" onClick={() => setShowNewTripForm(false)}>
+              Cancel
+            </button>
+          </div>
         </div>
-        )}
+      )}
 
-        <p className="message">{message}</p>
+      <p className="message">{message}</p>
     </div>
-    );
+  );
 }
 
 export default Trips;
