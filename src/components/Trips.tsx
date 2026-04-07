@@ -85,7 +85,7 @@ function Trips() {
         } else if (res.tripId) {
         // Trip created successfully
         const newTrip = {
-            id: res.tripId,
+            _id: res.tripId,
             name,
             destination,
             startDate,
@@ -136,7 +136,7 @@ function Trips() {
           <div
             key={index}
             className="trip-card"
-            onClick={() => navigate(`/trips/${c._id}`)}
+            onClick={() => navigate(`/trip/${c._id}`)}
           >
             <strong>{c.name}</strong>
             <br />
