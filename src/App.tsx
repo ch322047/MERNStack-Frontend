@@ -4,6 +4,8 @@ import './App.css';
 
 import LoginPage from './pages/LoginPage';
 import TripPage from './pages/TripPage';
+import TripDetailsPage from './pages/TripDetailsPage';
+
 
 function App() {
   return (
@@ -11,6 +13,7 @@ function App() {
       <Routes>
         <Route path="/" element={<LoginPage/>}/>
         <Route path="/trips" element={<TripPage/>}/>
+        <Route path="/trip/:tripId" element={<TripDetailsPage/>}/>
         <Route path="*" element={<Navigate to="/" replace />}/>
       </Routes>  
     </Router>

@@ -1,13 +1,14 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import TripFlight from "./TripFlight";
-import TripHotel from "./TripHotel";
-import TripItinerary from "./TripItinerary";
-import TripPacking from "./TripPacking";
+import TripFlight from "../components/TripFlight";
+import TripHotel from "../components/TripHotel";
+import TripItinerary from "../components/TripItinerary";
+import TripPacking from "../components/TripPacking";
 import "../index.css";
 
 function TripDetailsPage() {
-  const { tripId } = useParams<{ tripId: string }>();
+  const { tripId } = useParams();
+  console.log(tripId);
   const [tripName, setTripName] = useState("");
   const [activeTab, setActiveTab] = useState("Flights");
   const [message, setMessage] = useState("");
