@@ -136,11 +136,11 @@ function Trips() {
           <div
             key={index}
             className="trip-card"
-            onClick={() => navigate(`/trips/${c.id}`)}
+            onClick={() => navigate(`/trips/${c._id}`)}
           >
             <strong>{c.name}</strong>
             <br />
-            {c.id}
+            {c._id}
             <br />
             {c.destination}
             <br />
