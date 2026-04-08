@@ -72,10 +72,8 @@ function TripDetails() {
           <div className="trip-card sidebar-card">
             <h2 className="trip-name">{trip.name}</h2>
             <p className="trip-destination">{trip.destination}</p>
-            <p className={`trip-status status-${trip.status.toLowerCase()}`}>
-              {trip.status}
-            </p>
-            <p className="trip-countdown">{getDaysAway(trip.startDate)}</p>
+            <p className="trip-status">{trip.status.toUpperCase()} </p>
+            <p className="trip-time">T-{getDaysAway(trip.startDate)}d</p>
           </div>
         ) : (
           <p>Loading trip info...</p>

@@ -270,6 +270,15 @@ button[type="submit"]:hover {
   color: white;
 }
 
+.delete-btn {
+  background: #ce0000;
+  color: #fff;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
 /* MESSAGE */
 .message {
   text-align: center;

@@ -124,16 +124,16 @@ function TripFlight({ tripId }: TripFlightProps) {
   };
 
   return (
-    <div className="tripsection-page">
-      <div className="tripsection-grid">
+    <div className="trip-page">
+      <div className="trip-grid">
         {/* Add Flight Card */}
-        <div className="tripsection-card add-card" onClick={handleAddClick}>
+        <div className="trip-card add-card" onClick={handleAddClick}>
           + Add Flight
         </div>
 
         {/* Flight Cards */}
         {flights.map((f, i) => (
-          <div key={i} className="tripsection-card" onClick={() => handleEditClick(i)}>
+          <div key={i} className="trip-card" onClick={() => handleEditClick(i)}>
             <h3>{f.airline}</h3>
             <p>{f.flightNumber}</p>
             <p>Departure: {new Date(f.departure).toLocaleString()}</p>
@@ -185,17 +185,17 @@ function TripFlight({ tripId }: TripFlightProps) {
             </div>
 
             <div className="modal-buttons">
-              <button className="confirm-btn" onClick={saveFlight}>
-                {editingIndex === null ? "ADD FLIGHT" : "SAVE FLIGHT"}
-              </button>
-              <button className="cancel-btn" onClick={() => setShowModal(false)}>
-                CANCEL
-              </button>
               {editingIndex !== null && (
                 <button className="delete-btn" onClick={() => { deleteFlight(editingIndex); setShowModal(false); }}>
                   DELETE
                 </button>
               )}
+              <button className="confirm-btn" onClick={saveFlight}>
+                {editingIndex === null ? "ADD FLIGHT" : "SAVE"}
+              </button>
+              <button className="cancel-btn" onClick={() => setShowModal(false)}>
+                CANCEL
+              </button>
             </div>
           </div>
         </div>
