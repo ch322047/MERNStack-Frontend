@@ -62,24 +62,8 @@ function TripFlight({ tripId }: TripFlightProps) {
   // Open modal for editing
   const handleEditClick = (index: number) => {
     setEditingIndex(index);
-    setFlightForm({ 
-      ...flights[index],
-      departure: formatForInput(flights[index].departure),
-      arrival: formatForInput(flights[index].arrival),
-    });
+    setFlightForm({ ...flights[index]});
     setShowModal(true);
-  };
-
-  const formatForInput = (dateStr: string) => {
-    if (!dateStr) return "";
-    const d = new Date(dateStr);
-    const pad = (n: number) => n.toString().padStart(2, "0");
-    const yyyy = d.getFullYear();
-    const mm = pad(d.getMonth() + 1);
-    const dd = pad(d.getDate());
-    const hh = pad(d.getHours());
-    const min = pad(d.getMinutes());
-    return `${yyyy}-${mm}-${dd}T${hh}:${min}`;
   };
 
   const saveFlight = async () => {
@@ -136,8 +120,8 @@ function TripFlight({ tripId }: TripFlightProps) {
           <div key={i} className="trip-card" onClick={() => handleEditClick(i)}>
             <h3>{f.airline}</h3>
             <p>{f.flightNumber}</p>
-            <p>Departure: {new Date(f.departure).toLocaleString()}</p>
-            <p>Arrival: {f.arrival ? new Date(f.arrival).toLocaleString() : "-"}</p>
+            <p>Departure: {f.departure || "-"}</p>
+            <p>Arrival: {f.arrival || "-"}</p>
           </div>
         ))}
       </div>
@@ -185,14 +169,14 @@ function TripFlight({ tripId }: TripFlightProps) {
             </div>
 
             <div className="modal-buttons">
+              <button className="confirm-btn" onClick={saveFlight}>
+                {editingIndex === null ? "ADD FLIGHT" : "SAVE"}
+              </button>
               {editingIndex !== null && (
                 <button className="delete-btn" onClick={() => { deleteFlight(editingIndex); setShowModal(false); }}>
                   DELETE
                 </button>
               )}
-              <button className="confirm-btn" onClick={saveFlight}>
-                {editingIndex === null ? "ADD FLIGHT" : "SAVE"}
-              </button>
               <button className="cancel-btn" onClick={() => setShowModal(false)}>
                 CANCEL
               </button>

@@ -178,6 +178,7 @@ button[type="submit"]:hover {
 .trip-time {
   color: #00cfff;
   font-size: 14px;
+  font-weight: bold;
 }
 
 .trip-destination {
