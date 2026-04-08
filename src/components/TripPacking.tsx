@@ -14,6 +14,9 @@ interface TripPackingProps {
 function TripPacking({ tripId }: TripPackingProps) {
   const [items, setItems] = useState<PackingItem[]>([]);
   const [message, setMessage] = useState("");
+  const [showModal, setShowModal] = useState(false);
+  const [editingIndex, setEditingIndex] = useState<number | null>(null);
+  const [itemForm, setItemForm] = useState<PackingItem>({ item: "", packed: false });
 
   const stored = localStorage.getItem("user_data");
   const ud = stored && stored !== "undefined" ? JSON.parse(stored) : { id: -1 };
@@ -23,111 +26,132 @@ function TripPacking({ tripId }: TripPackingProps) {
     `https://lampstackprojectgroup9.com/api/${route}`;
 
   // Fetch packing list
-  useEffect(() => {
-    async function fetchPackingList() {
-      try {
-        const res = await fetch(buildPath(`get-trip/${tripId}`));
-        const data = await res.json();
-        setItems(data.trip?.packingList || []);
-      } catch (err: any) {
-        console.error(err);
-        setMessage("Failed to load packing list");
-      }
+  const fetchItems = async () => {
+    try {
+      const res = await fetch(buildPath(`get-trip/${tripId}`));
+      const data = await res.json();
+      setItems(data.trip?.packingList || []);
+    } catch (err: any) {
+      console.error(err);
+      setMessage("Failed to load packing list");
     }
-    fetchPackingList();
+  };
+
+  useEffect(() => {
+    fetchItems();
   }, [tripId]);
 
-  // Add item
-  const addItem = async () => {
-    const newItem: PackingItem = { item: "", packed: false };
+  // Open modal for new item
+  const handleAddClick = () => {
+    setEditingIndex(null);
+    setItemForm({ item: "", packed: false });
+    setShowModal(true);
+  };
+
+  // Open modal for editing
+  const handleEditClick = (index: number) => {
+    setEditingIndex(index);
+    setItemForm({ ...items[index] });
+    setShowModal(true);
+  };
+
+  const saveItem = async () => {
+    if (!itemForm.item) {
+      setMessage("Please enter an item name");
+      return;
+    }
+
+    const payload = { ...itemForm };
+
     try {
-      const res = await fetch(buildPath(`add-to-packing-list/${userId}/${tripId}`), {
-        method: "POST",
-        body: JSON.stringify(newItem),
+      const url =
+        editingIndex === null
+          ? buildPath(`add-to-packing-list/${userId}/${tripId}`)
+          : buildPath(`edit-packing-list/${userId}/${tripId}/${items[editingIndex]._id}`);
+
+      await fetch(url, {
+        method: editingIndex === null ? "POST" : "PUT",
+        body: JSON.stringify(payload),
         headers: { "Content-Type": "application/json" },
       });
-      const data = await res.json();
-      if (data.error) setMessage(data.error);
-      else setItems([...items, data.item]);
+
+      setShowModal(false);
+      fetchItems();
     } catch (err: any) {
-      setMessage("Network error");
+      setMessage(err instanceof Error ? err.message : String(err));
     }
   };
 
-  // Update item
-  const updateItem = async (index: number, field: keyof PackingItem, value: any) => {
-    const updated = [...items];
-    (updated[index] as any)[field] = value;
-    setItems(updated);
-
-    const itemId = updated[index]._id;
-    if (!itemId) return;
-
-    try {
-      const res = await fetch(
-        buildPath(`edit-packing-list/${userId}/${tripId}/${itemId}`),
-        {
-          method: "PUT",
-          body: JSON.stringify({ [field]: value }),
-          headers: { "Content-Type": "application/json" },
-        }
-      );
-      const data = await res.json();
-      if (data.error) setMessage(data.error);
-    } catch (err: any) {
-      setMessage("Network error");
-    }
-  };
-
-  // Delete item
   const deleteItem = async (index: number) => {
-    const updated = [...items];
-    const itemId = updated[index]._id;
+    const itemId = items[index]._id;
     if (!itemId) return;
 
     try {
-      const res = await fetch(
-        buildPath(`delete-packing-list/${userId}/${tripId}/${itemId}`),
-        { method: "DELETE" }
-      );
-      const data = await res.json();
-      if (!data.error) {
-        updated.splice(index, 1);
-        setItems(updated);
-      } else setMessage(data.error);
+      await fetch(buildPath(`delete-PackingList/${userId}/${tripId}/${itemId}`), {
+        method: "DELETE",
+      });
+      setShowModal(false);
+      fetchItems();
     } catch (err: any) {
-      setMessage("Network error");
+      console.error(err);
+      setMessage("Failed to delete item");
     }
   };
 
   return (
-    <div className="tab-section">
-      <button className="add-trip-btn" onClick={addItem}>
+    <div className="trip-page">
+      <button className="confirm-btn add-floating-btn" onClick={handleAddClick}>
         + Add Item
       </button>
 
-      <div className="packing-list">
+      <div className="trip-grid">
         {items.map((i, idx) => (
-          <div key={idx} className="packing-item">
-            <input
-              placeholder="Item"
-              value={i.item}
-              onChange={(e) => updateItem(idx, "item", e.target.value)}
-            />
-            <label className="packed-label">
-              <input
-                type="checkbox"
-                checked={i.packed || false}
-                onChange={(e) => updateItem(idx, "packed", e.target.checked)}
-              />
-              Packed
-            </label>
-            <button className="delete-btn" onClick={() => deleteItem(idx)}>
-              Delete
-            </button>
+          <div key={idx} className="trip-card" onClick={() => handleEditClick(idx)}>
+            <p>{i.item}</p>
+            <p>Packed: {i.packed ? "Yes" : "No"}</p>
           </div>
         ))}
       </div>
+
+      {showModal && (
+        <div className="modal-overlay">
+          <div className="modal">
+            <h2>{editingIndex === null ? "Add Packing Item" : "Edit Packing Item"}</h2>
+
+            <div className="modal-field">
+              <label>Item Name</label>
+              <input
+                placeholder="Item"
+                value={itemForm.item}
+                onChange={(e) => setItemForm({ ...itemForm, item: e.target.value })}
+              />
+            </div>
+
+            <div className="modal-field">
+              <input
+                type="checkbox"
+                checked={itemForm.packed || false}
+                onChange={(e) => setItemForm({ ...itemForm, packed: e.target.checked })}
+              />
+              <span>Packed</span>
+            </div>
+
+            <div className="modal-buttons">
+              <button className="confirm-btn" onClick={saveItem}>
+                {editingIndex === null ? "ADD ITEM" : "SAVE"}
+              </button>
+              {editingIndex !== null && (
+                <button className="delete-btn" onClick={() => deleteItem(editingIndex)}>
+                  DELETE
+                </button>
+              )}
+              <button className="cancel-btn" onClick={() => setShowModal(false)}>
+                CANCEL
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {message && <p className="message">{message}</p>}
     </div>
