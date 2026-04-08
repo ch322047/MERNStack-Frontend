@@ -165,26 +165,41 @@ function Trips() {
           <div className="modal">
             <h2>Create a Trip</h2>
 
-            <input
-              placeholder="Trip Name"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-            />
-            <input
-              placeholder="Destination"
-              value={destination}
-              onChange={(e) => setDestination(e.target.value)}
-            />
-            <input
-              type="date"
-              value={startDate}
-              onChange={(e) => setStartDate(e.target.value)}
-            />
-            <input
-              type="date"
-              value={endDate}
-              onChange={(e) => setEndDate(e.target.value)}
-            />
+            <div className="modal-field">
+              <label>Name</label>
+              <input
+                placeholder="Trip Name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+              />
+            </div>
+
+            <div className="modal-field">
+              <label>Destination</label>
+              <input
+                placeholder="Destination Name"
+                value={destination}
+                onChange={(e) => setDestination(e.target.value)}
+              />
+            </div>
+
+            <div className="modal-field">
+              <label>Start Date</label>
+              <input
+                type="date"
+                value={startDate}
+                onChange={(e) => setStartDate(e.target.value)}
+              />
+            </div>
+
+            <div className="modal-field">
+              <label>End Date</label>
+              <input
+                type="date"
+                value={endDate}
+                onChange={(e) => setEndDate(e.target.value)}
+              />
+            </div>
 
             <div className="modal-buttons">
               <button className="confirm-btn" onClick={handleAddTrip}>

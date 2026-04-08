@@ -58,13 +58,15 @@ function TripDetails() {
   };
 
   return (
-    <div className="trip-details-page">
-      <aside className="trip-sidebar">
-        <h2 className="trip-title">{tripName || "Loading..."}</h2>
+    <div className="details-page">
+      {/* SIDEBAR */}
+      <aside className="details-sidebar">
+        <h2 className="details-title">{tripName}</h2>
+
         {["Flights", "Hotels", "Itinerary", "Packing List"].map((tab) => (
           <button
             key={tab}
-            className={`sidebar-btn ${activeTab === tab ? "active-tab" : ""}`}
+            className={`details-tab ${activeTab === tab ? "active" : ""}`}
             onClick={() => setActiveTab(tab)}
           >
             {tab}
@@ -72,9 +74,15 @@ function TripDetails() {
         ))}
       </aside>
 
-      <main className="trip-content">
+      {/* MAIN CONTENT */}
+      <main className="details-content">
+        <div className="details-header">
+          <h1>{activeTab}</h1>
+        </div>
+
         {message && <p className="message">{message}</p>}
-        {renderActiveTab()}
+
+        <div className="details-body">{renderActiveTab()}</div>
       </main>
     </div>
   );
