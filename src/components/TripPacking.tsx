@@ -100,10 +100,6 @@ function TripPacking({ tripId }: TripPackingProps) {
 
   return (
     <div className="trip-page">
-      <button className="confirm-btn add-floating-btn" onClick={handleAddClick}>
-        + Add Item
-      </button>
-
       <div className="trip-grid">
         {items.map((i, idx) => (
           <div key={idx} className="trip-card" onClick={() => handleEditClick(idx)}>
@@ -112,6 +108,10 @@ function TripPacking({ tripId }: TripPackingProps) {
           </div>
         ))}
       </div>
+
+      <button className="add-floating-btn" onClick={handleAddClick}>
+        + Add Item
+      </button>
 
       {showModal && (
         <div className="modal-overlay">
@@ -127,13 +127,13 @@ function TripPacking({ tripId }: TripPackingProps) {
               />
             </div>
 
-            <div className="modal-field">
-              <input
-                type="checkbox"
-                checked={itemForm.packed || false}
-                onChange={(e) => setItemForm({ ...itemForm, packed: e.target.checked })}
-              />
-              <span>Packed</span>
+            <div className="modal-field booked-field">
+              <label>Packed</label>
+                <input
+                  type="checkbox"
+                  checked={itemForm.packed}
+                  onChange={(e) => setItemForm({ ...itemForm, packed: e.target.checked })}
+                />
             </div>
 
             <div className="modal-buttons">
