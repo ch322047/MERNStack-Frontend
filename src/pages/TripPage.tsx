@@ -1,5 +1,5 @@
 import PageTitle from '../components/PageTitle';
-//import LoggedInName from '../components/LoggedInName';
+import LoggedInName from '../components/LoggedInName';
 import Trips from '../components/Trips';
 
 const TripPage = () =>
@@ -7,6 +7,7 @@ const TripPage = () =>
     return(
         <div>
             <PageTitle />
+            <LoggedInName />
             <Trips />
         </div>
     );

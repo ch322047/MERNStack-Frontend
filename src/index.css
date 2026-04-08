@@ -113,217 +113,152 @@ button[type="submit"]:hover {
   box-shadow: 0 4px 12px rgba(100, 108, 255, 0.4);
 }
 
-.message {
-  margin-top: 1rem;
-  min-height: 1.5em;
-}
-
-/* CARDS PAGE */
-.cards-page {
+/* trips page */
+/* PAGE BACKGROUND */
+.trips-page {
   min-height: 100vh;
-  padding: 2rem;
+  background: url('/stars-bg.jpg') center/cover no-repeat;
+  padding: 40px;
+  color: white;
+}
+
+/* TITLE */
+.title {
   text-align: center;
+  font-size: 36px;
+  margin-bottom: 40px;
+  font-weight: 500;
 }
 
-.cards-page h1 {
-  color: white;
-  text-shadow: 0 0 10px rgba(0,0,0,0.8);
-}
-
-.search-bar {
-  margin: 1rem auto 2rem auto;
-  padding: 0.6em 1em;
-  border-radius: 999px;
-  border: none;
-  width: 250px;
-  text-align: center;
-}
-
-.grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 2rem;
-}
-
-.card {
-  height: 120px;
-  border-radius: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  font-size: 1.2rem;
-  color: white;
-
-  cursor: pointer;
-
-  background: rgba(255,255,255,0.08);
-  backdrop-filter: blur(10px);
-
-  transition: all 0.25s ease;
-}
-
-.card:hover {
-  transform: scale(1.08);
-  box-shadow: 0 10px 25px rgba(0,0,0,0.5);
-}
-
-/* TRIP CREATION PAGE */
-.trip-create-container {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  max-width: 500px;
-  margin: 2rem auto;
-  padding: 1.5rem;
-  background-color: rgba(42, 42, 42, 0.95);
-  border-radius: 16px;
-  border: 1px solid #444;
-}
-
-.trip-create-container input {
-  width: 100%;
-}
-
-.trip-create-container button {
-  width: 100%;
-}
-
-/* TRIP DETAILS PAGE */
-.trip-details-page {
-  display: flex;
-  min-height: 100vh;
-}
-
-.trip-sidebar {
-  position: sticky; /* stays in view on scroll */
-  top: 0;
-  width: 250px; /* fixed width */
-  min-height: 100vh; /* full height */
-  background-color: #f5f5f5;
-  padding: 20px;
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.trip-title {
-  font-size: 1.5rem;
-  margin-bottom: 20px;
-}
-
-.trip-sidebar h2 {
-  margin-bottom: 1rem;
-  text-align: center;
-  font-size: 1.2rem;
-  text-transform: uppercase;
-}
-
-.trip-sidebar button {
-  padding: 10px 15px;
-  border: none;
-  background-color: #e0e0e0;
-  cursor: pointer;
-  text-align: left;
-  font-size: 1rem;
-  border-radius: 5px;
-  transition: background-color 0.2s;
-}
-
-.trip-sidebar button:hover {
-  background-color: #535bf2;
-}
-
-.trip-sidebar button.active-tab {
-  background-color: #646cff;
-  font-weight: 600;
-  color: white;
-}
-
-.trip-content {
-  flex: 1;
-  padding: 20px;
-  overflow-x: hidden;
-  overflow-y: auto;
-}
-
-/* TRIP SECTION STYLING */
-.trip-section-container {
-  padding: 20px;
-  color: white;
-}
-
-.trip-section-header {
-  display: flex;
-  align-items: center;
-  gap: 15px;
-  margin-bottom: 20px;
-}
-
-.trip-section-header h2 {
-  flex-grow: 1;
-}
-
-.trip-search {
-  padding: 8px;
-  border-radius: 8px;
-  border: none;
-  outline: none;
-}
-
-.add-btn {
-  padding: 10px 16px;
-  border: none;
-  border-radius: 10px;
-  background: #4a90e2;
-  color: white;
-  cursor: pointer;
-  transition: transform 0.2s ease;
-}
-
-.add-btn:hover {
-  transform: scale(1.1);
-}
-
+/* GRID */
 .trip-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  gap: 20px;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 25px;
+  max-width: 900px;
+  margin: auto;
 }
 
+/* CARD BASE */
 .trip-card {
-  background: rgba(255, 255, 255, 0.08);
-  backdrop-filter: blur(10px);
+  background: rgba(10, 20, 40, 0.85);
+  border-radius: 16px;
   padding: 20px;
-  border-radius: 20px;
-  transition: transform 0.25s ease, background 0.25s ease;
   cursor: pointer;
+  transition: 0.2s;
+  box-shadow: 0 0 15px rgba(0, 150, 255, 0.15);
 }
 
 .trip-card:hover {
-  transform: scale(1.05);
-  background: rgba(255, 255, 255, 0.15);
+  transform: translateY(-5px);
+  box-shadow: 0 0 25px rgba(0, 150, 255, 0.4);
 }
 
-.trip-card input {
-  background: transparent;
-  border: none;
-  outline: none;
-  color: white;
-  text-align: center;
-  font-size: 1.2rem;
-  width: 80%;
-}
-
+/* ADD CARD */
 .add-card {
   display: flex;
-  align-items: center;
   justify-content: center;
-  font-size: 40px;
-  opacity: 0.7;
+  align-items: center;
+  font-size: 20px;
+  color: #00cfff;
+  border: 1px solid #00cfff;
 }
 
-.add-card:hover {
-  opacity: 1;
+/* CARD CONTENT */
+.trip-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.trip-top h2 {
+  margin: 0;
+  font-size: 20px;
+}
+
+.trip-time {
+  color: #00cfff;
+  font-size: 14px;
+}
+
+.trip-destination {
+  margin: 10px 0 5px;
+  color: #ccc;
+}
+
+.trip-status {
+  color: #00cfff;
+  font-size: 12px;
+  letter-spacing: 1px;
+}
+
+/* MODAL OVERLAY */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 20, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+/* MODAL BOX */
+.modal {
+  background: rgba(10, 20, 40, 0.95);
+  padding: 30px;
+  border-radius: 16px;
+  width: 350px;
+  box-shadow: 0 0 25px rgba(0, 150, 255, 0.3);
+}
+
+.modal h2 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+/* INPUTS */
+.modal input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 12px;
+  border-radius: 8px;
+  border: none;
+  background: #0b1a2e;
+  color: white;
+}
+
+/* BUTTONS */
+.modal-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+.confirm-btn {
+  background: #00cfff;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 8px;
+  cursor: pointer;
+  color: black;
+  font-weight: bold;
+}
+
+.cancel-btn {
+  background: #1e2a3a;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 8px;
+  cursor: pointer;
+  color: white;
+}
+
+/* MESSAGE */
+.message {
+  text-align: center;
+  margin-top: 20px;
 }

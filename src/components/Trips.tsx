@@ -117,81 +117,77 @@ function Trips() {
       )
     : cards;
 
-  return (
-    <div className="trip-create-container">
-      <input
-        className="trip-search"
-        type="text"
-        placeholder="Search Trips..."
-        value={search}
-        onChange={(e) => setSearchValue(e.target.value)}
-      />
+  function getDaysAway(dateStr: string) {
+    const today = new Date();
+    const target = new Date(dateStr);
+    const diff = Math.ceil((target.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
+    return diff > 0 ? diff : 0;
+  }
 
+  return (
+    <div className="trips-page">
       <div className="trip-grid">
+        {/* Add Trip Card */}
         <div className="trip-card add-card" onClick={() => setShowNewTripForm(true)}>
-          + Add Trip
+          + Add New Trip
         </div>
 
+        {/* Trip Cards */}
         {filteredCards.map((c: any, index: number) => (
           <div
             key={index}
             className="trip-card"
             onClick={() => navigate(`/trip/${c._id}`)}
           >
-            <strong>{c.name}</strong>
-            <br />
-            {c.destination}
-            <br />
-            {c.startDate} {c.endDate ? `- ${c.endDate}` : ''}
+            <div className="trip-top">
+              <h2>{c.name}</h2>
+              <span className="trip-time">T-{getDaysAway(c.startDate)}d</span>
+            </div>
+
+            <p className="trip-destination">{c.destination}</p>
+            <p className="trip-status">{c.status?.toUpperCase() || "PLANNING"}</p>
           </div>
         ))}
       </div>
 
+      {/* MODAL */}
       {showNewTripForm && (
-        <div className="trip-section-container">
-          <input
-            type="text"
-            placeholder="Trip Name"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            className="trip-search"
-          />
-          <input
-            type="text"
-            placeholder="Destination"
-            value={destination}
-            onChange={(e) => setDestination(e.target.value)}
-            className="trip-search"
-          />
-          <input
-            type="date"
-            value={startDate}
-            onChange={(e) => setStartDate(e.target.value)}
-            className="trip-search"
-          />
-          <input
-            type="date"
-            value={endDate}
-            onChange={(e) => setEndDate(e.target.value)}
-            className="trip-search"
-          />
-          <select
-            value={status}
-            onChange={(e) => setStatus(e.target.value)}
-            className="trip-search"
-          >
-            <option value="planning">Planning</option>
-            <option value="ready">Ready</option>
-            <option value="active">Active</option>
-            <option value="completed">Completed</option>
-          </select>
-          <div style={{ marginTop: '10px', display: 'flex', gap: '10px' }}>
-            <button className="add-btn" onClick={handleAddTrip}>
-              Create Trip
-            </button>
-            <button className="add-btn" onClick={() => setShowNewTripForm(false)}>
-              Cancel
-            </button>
+        <div className="modal-overlay">
+          <div className="modal">
+            <h2>Create a Trip</h2>
+
+            <input
+              placeholder="Trip Name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+            />
+            <input
+              placeholder="Destination"
+              value={destination}
+              onChange={(e) => setDestination(e.target.value)}
+            />
+            <input
+              type="date"
+              value={startDate}
+              onChange={(e) => setStartDate(e.target.value)}
+            />
+            <input
+              type="date"
+              value={endDate}
+              onChange={(e) => setEndDate(e.target.value)}
+            />
+
+            <div className="modal-buttons">
+              <button className="confirm-btn" onClick={handleAddTrip}>
+                CREATE TRIP
+              </button>
+              <button
+                className="cancel-btn"
+                onClick={() => setShowNewTripForm(false)}
+              >
+                CANCEL
+              </button>
+            </div>
           </div>
         </div>
       )}
