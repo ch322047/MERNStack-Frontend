@@ -62,8 +62,26 @@ function TripFlight({ tripId }: TripFlightProps) {
   // Open modal for editing
   const handleEditClick = (index: number) => {
     setEditingIndex(index);
-    setFlightForm({ ...flights[index]});
+    setFlightForm({ 
+      ...flights[index],
+      departure: formatForInput(flights[index].departure),
+      arrival: formatForInput(flights[index].arrival),
+    });
     setShowModal(true);
+  };
+
+  const formatForInput = (dateStr: string) => {
+    if (!dateStr) return "";
+    const d = new Date(dateStr);
+    const pad = (n: number) => n.toString().padStart(2, "0");
+
+    const yyyy = d.getFullYear();
+    const mm = pad(d.getMonth() + 1);
+    const dd = pad(d.getDate());
+    const hh = pad(d.getHours());
+    const min = pad(d.getMinutes());
+
+    return `${yyyy}-${mm}-${dd}T${hh}:${min}`;
   };
 
   const saveFlight = async () => {
@@ -72,19 +90,30 @@ function TripFlight({ tripId }: TripFlightProps) {
       return;
     }
 
+    // Convert local datetime-local string to UTC
+    const departureUTC = new Date(flightForm.departure);
+    const arrivalUTC = flightForm.arrival ? new Date(flightForm.arrival) : null;
+
+    const payload = {
+      ...flightForm,
+      departure: departureUTC.toISOString(),
+      arrival: arrivalUTC ? arrivalUTC.toISOString() : null,
+    };
+
     try {
-      const url = editingIndex === null
-        ? buildPath(`add-flight/${userId}/${tripId}`)
-        : buildPath(`edit-flight/${userId}/${tripId}/${flights[editingIndex]._id}`);
+      const url =
+        editingIndex === null
+          ? buildPath(`add-flight/${userId}/${tripId}`)
+          : buildPath(`edit-flight/${userId}/${tripId}/${flights[editingIndex]._id}`);
 
       await fetch(url, {
         method: editingIndex === null ? "POST" : "PUT",
-        body: JSON.stringify(flightForm),
+        body: JSON.stringify(payload),
         headers: { "Content-Type": "application/json" },
       });
 
-      setShowModal(false); // close the modal
-      fetchFlights(); //refresh flight list
+      setShowModal(false); 
+      fetchFlights();
     } catch (err: any) {
       setMessage(err instanceof Error ? err.message : String(err));
     }
@@ -120,8 +149,8 @@ function TripFlight({ tripId }: TripFlightProps) {
           <div key={i} className="trip-card" onClick={() => handleEditClick(i)}>
             <h3>{f.airline}</h3>
             <p>{f.flightNumber}</p>
-            <p>Departure: {f.departure || "-"}</p>
-            <p>Arrival: {f.arrival || "-"}</p>
+            <p>Departure: {new Date(f.departure).toLocaleString()}</p>
+            <p>Arrival: {f.arrival ? new Date(f.arrival).toLocaleString() : "-"}</p>
           </div>
         ))}
       </div>
