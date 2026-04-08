@@ -4,87 +4,130 @@ interface TripHotelProps {
   tripId: string;
 }
 
+interface Hotel {
+  _id?: string;
+  name: string;
+  checkIn: string;
+  checkOut: string;
+  booked: boolean;
+}
+
 function TripHotel({ tripId }: TripHotelProps) {
   const stored = localStorage.getItem("user_data");
   const ud = stored && stored !== "undefined" ? JSON.parse(stored) : { id: -1 };
   const userId: string = ud.id;
 
-  const [hotels, setHotels] = useState<any[]>([]);
+  const [hotels, setHotels] = useState<Hotel[]>([]);
   const [message, setMessage] = useState("");
+
+  const [showModal, setShowModal] = useState(false);
+  const [editingIndex, setEditingIndex] = useState<number | null>(null);
+  const [hotelForm, setHotelForm] = useState<Hotel>({
+    name: "",
+    checkIn: "",
+    checkOut: "",
+    booked: false,
+  });
 
   const buildPath = (route: string) =>
     `https://lampstackprojectgroup9.com/api/${route}`;
 
   // Fetch hotels from trip
-  useEffect(() => {
-    async function fetchHotels() {
-      try {
-        const res = await fetch(buildPath(`get-trip/${tripId}`));
-        const data = await res.json();
-        if (data.error) setMessage(data.error);
-        else setHotels(data.trip?.hotels || []);
-      } catch (err: any) {
-        console.error(err);
-        setMessage("Failed to load hotels.");
-      }
+  const fetchHotels = async () => {
+    try {
+      const res = await fetch(buildPath(`get-trip/${tripId}`));
+      const data = await res.json();
+      if (data.error) setMessage(data.error);
+      else setHotels((data.trip?.hotels || []).filter((h: any) => h));
+    } catch (err: any) {
+      console.error(err);
+      setMessage("Failed to load hotels.");
     }
+  };
+
+  useEffect(() => {
     fetchHotels();
   }, [tripId]);
 
-  const addHotel = async () => {
-    const newHotel = { name: "", checkIn: "", checkOut: "", booked: false };
+  // Open modal for new hotel
+  const handleAddClick = () => {
+    setEditingIndex(null);
+    setHotelForm({ name: "", checkIn: "", checkOut: "", booked: false });
+    setShowModal(true);
+  };
+
+  // Open modal for editing
+  const handleEditClick = (index: number) => {
+    setEditingIndex(index);
+    setHotelForm({
+      ...hotels[index],
+      checkIn: formatForInput(hotels[index].checkIn),
+      checkOut: formatForInput(hotels[index].checkOut),
+    });
+    setShowModal(true);
+  };
+
+  const formatForInput = (dateStr: string) => {
+    if (!dateStr) return "";
+    const d = new Date(dateStr);
+    const pad = (n: number) => n.toString().padStart(2, "0");
+
+    const yyyy = d.getFullYear();
+    const mm = pad(d.getMonth() + 1);
+    const dd = pad(d.getDate());
+    const hh = pad(d.getHours());
+    const min = pad(d.getMinutes());
+
+    return `${yyyy}-${mm}-${dd}T${hh}:${min}`;
+  };
+
+  // Save hotel (add or edit)
+  const saveHotel = async () => {
+    if (!hotelForm.name || !hotelForm.checkIn) {
+      setMessage("Please fill Hotel Name and Check-In Time");
+      return;
+    }
+
+    // Convert local datetime-local string to UTC
+    const checkInUTC = new Date(hotelForm.checkIn);
+    const checkOutUTC = hotelForm.checkOut ? new Date(hotelForm.checkOut) : null;
+
+    const payload = {
+      ...hotelForm,
+      checkIn: checkInUTC.toISOString(),
+      checkOut: checkOutUTC ? checkOutUTC.toISOString() : null,
+    };
 
     try {
-      const res = await fetch(buildPath(`add-hotel/${userId}/${tripId}`), {
-        method: "POST",
-        body: JSON.stringify(newHotel),
+      const url =
+        editingIndex === null
+          ? buildPath(`add-hotel/${userId}/${tripId}`)
+          : buildPath(`edit-hotel/${userId}/${tripId}/${hotels[editingIndex]._id}`);
+
+      await fetch(url, {
+        method: editingIndex === null ? "POST" : "PUT",
+        body: JSON.stringify(payload),
         headers: { "Content-Type": "application/json" },
       });
-      const data = await res.json();
-      if (data.error) setMessage(data.error);
-      else setHotels([...hotels, data.hotel]);
+
+      setShowModal(false);
+      fetchHotels();
     } catch (err: any) {
       setMessage(err instanceof Error ? err.message : String(err));
     }
   };
 
-  const updateHotel = async (index: number, field: string, value: any) => {
-    const updated = [...hotels];
-    updated[index][field] = value;
-    setHotels(updated);
-
-    const hotelId = updated[index].id;
-    if (!hotelId) return;
-
-    try {
-      const res = await fetch(
-        buildPath(`edit-hotel/${userId}/${tripId}/${hotelId}`),
-        {
-          method: "POST",
-          body: JSON.stringify(updated[index]),
-          headers: { "Content-Type": "application/json" },
-        }
-      );
-      const data = await res.json();
-      if (data.error) setMessage(data.error);
-    } catch (err: any) {
-      console.error(err);
-      setMessage("Failed to update hotel.");
-    }
-  };
-
+  // Delete hotel
   const deleteHotel = async (index: number) => {
-    const hotelId = hotels[index].id;
+    const hotelId = hotels[index]._id;
     if (!hotelId) return;
 
     try {
-      const res = await fetch(
-        buildPath(`delete-hotel/${userId}/${tripId}/${hotelId}`),
-        { method: "DELETE" }
-      );
-      const data = await res.json();
-      if (data.error) setMessage(data.error);
-      else setHotels(hotels.filter((_, i) => i !== index));
+      await fetch(buildPath(`delete-hotel/${userId}/${tripId}/${hotelId}`), {
+        method: "DELETE",
+      });
+      setShowModal(false);
+      fetchHotels();
     } catch (err: any) {
       console.error(err);
       setMessage("Failed to delete hotel.");
@@ -92,43 +135,92 @@ function TripHotel({ tripId }: TripHotelProps) {
   };
 
   return (
-    <div className="tab-section">
-      <button className="add-btn" onClick={addHotel}>
-        + Add Hotel
-      </button>
-
-      {hotels.map((h, i) => (
-        <div key={i} className="hotel-item">
-          <input
-            value={h.name}
-            placeholder="Hotel Name"
-            onChange={(e) => updateHotel(i, "name", e.target.value)}
-          />
-          <input
-            type="date"
-            value={h.checkIn ? new Date(h.checkIn).toISOString().slice(0, 10) : ""}
-            onChange={(e) => updateHotel(i, "checkIn", e.target.value)}
-          />
-          <input
-            type="date"
-            value={h.checkOut ? new Date(h.checkOut).toISOString().slice(0, 10) : ""}
-            onChange={(e) => updateHotel(i, "checkOut", e.target.value)}
-          />
-          <label>
-            <input
-              type="checkbox"
-              checked={h.booked || false}
-              onChange={(e) => updateHotel(i, "booked", e.target.checked)}
-            />
-            Booked
-          </label>
-          <button className="delete-btn" onClick={() => deleteHotel(i)}>
-            Delete
-          </button>
+    <div className="trip-page">
+      <div className="trip-grid">
+        {/* Add Hotel Card */}
+        <div className="trip-card add-card" onClick={handleAddClick}>
+          + Add Hotel
         </div>
-      ))}
 
-      {message && <p className="message">{message}</p>}
+        {/* Hotel Cards */}
+        {hotels.map((h, i) => (
+          <div key={i} className="trip-card" onClick={() => handleEditClick(i)}>
+            <h3>{h.name}</h3>
+            <p>Check-In: {h.checkIn ? new Date(h.checkIn).toLocaleString() : "-"}</p>
+            <p>Check-Out: {h.checkOut ? new Date(h.checkOut).toLocaleString() : "-"}</p>
+            <p>Booked: {h.booked ? "Yes" : "No"}</p>
+          </div>
+        ))}
+      </div>
+
+      {/* Modal */}
+      {showModal && (
+        <div className="modal-overlay">
+          <div className="modal">
+            <h2>{editingIndex === null ? "Add a Hotel" : "Edit Hotel"}</h2>
+
+            <div className="modal-field">
+              <label>Hotel Name</label>
+              <input
+                placeholder="Hotel Name"
+                value={hotelForm.name}
+                onChange={(e) => setHotelForm({ ...hotelForm, name: e.target.value })}
+              />
+            </div>
+
+            <div className="modal-field">
+              <label>Check-In Time</label>
+              <input
+                type="datetime-local"
+                value={hotelForm.checkIn}
+                onChange={(e) => setHotelForm({ ...hotelForm, checkIn: e.target.value })}
+              />
+            </div>
+
+            <div className="modal-field">
+              <label>Check-Out Time</label>
+              <input
+                type="datetime-local"
+                value={hotelForm.checkOut}
+                onChange={(e) => setHotelForm({ ...hotelForm, checkOut: e.target.value })}
+              />
+            </div>
+
+            <div className="modal-field">
+              <label>
+                <input
+                  type="checkbox"
+                  checked={hotelForm.booked}
+                  onChange={(e) => setHotelForm({ ...hotelForm, booked: e.target.checked })}
+                />
+                Booked
+              </label>
+            </div>
+
+            <div className="modal-buttons">
+              <button className="confirm-btn" onClick={saveHotel}>
+                {editingIndex === null ? "ADD HOTEL" : "SAVE"}
+              </button>
+              {editingIndex !== null && (
+                <button
+                  className="delete-btn"
+                  onClick={() => {
+                    deleteHotel(editingIndex);
+                    setShowModal(false);
+                  }}
+                >
+                  DELETE
+                </button>
+              )}
+              <button className="cancel-btn" onClick={() => setShowModal(false)}>
+                CANCEL
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      <p className="message">{message}</p>
     </div>
   );
 }

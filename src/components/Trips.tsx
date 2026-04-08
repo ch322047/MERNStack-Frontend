@@ -136,11 +136,6 @@ function Trips() {
       />
 
       <div className="trip-grid">
-        {/* Add Trip Card */}
-        <div className="trip-card add-card" onClick={() => setShowNewTripForm(true)}>
-          + Add New Trip
-        </div>
-
         {/* Trip Cards */}
         {filteredCards.map((c: any, index: number) => (
           <div
@@ -159,12 +154,19 @@ function Trips() {
         ))}
       </div>
 
+      {/* Floating Add Trip Button */}
+      <button
+        className="add-trip-btn"
+        onClick={() => setShowNewTripForm(true)}
+      >
+        + Add New Trip
+      </button>
+
       {/* MODAL */}
       {showNewTripForm && (
         <div className="modal-overlay">
           <div className="modal">
             <h2>Create a Trip</h2>
-
             <div className="modal-field">
               <label>Name</label>
               <input
@@ -173,7 +175,6 @@ function Trips() {
                 onChange={(e) => setName(e.target.value)}
               />
             </div>
-
             <div className="modal-field">
               <label>Destination</label>
               <input
@@ -182,7 +183,6 @@ function Trips() {
                 onChange={(e) => setDestination(e.target.value)}
               />
             </div>
-
             <div className="modal-field">
               <label>Start Date</label>
               <input
@@ -191,7 +191,6 @@ function Trips() {
                 onChange={(e) => setStartDate(e.target.value)}
               />
             </div>
-
             <div className="modal-field">
               <label>End Date</label>
               <input
@@ -200,7 +199,6 @@ function Trips() {
                 onChange={(e) => setEndDate(e.target.value)}
               />
             </div>
-
             <div className="modal-buttons">
               <button className="confirm-btn" onClick={handleAddTrip}>
                 CREATE TRIP
