@@ -60,57 +60,46 @@ function TripFlight({ tripId }: TripFlightProps) {
   // Open modal for editing
   const handleEditClick = (index: number) => {
     setEditingIndex(index);
-    setFlightForm({ ...flights[index] });
+    setFlightForm({ 
+      ...flights[index],
+      departure: formatForInput(flights[index].departure),
+      arrival: formatForInput(flights[index].arrival),
+    });
     setShowModal(true);
   };
 
-  // Save flight (add or edit)
+  const formatForInput = (dateStr: string) => {
+    if (!dateStr) return "";
+    const d = new Date(dateStr);
+    const pad = (n: number) => n.toString().padStart(2, "0");
+    const yyyy = d.getFullYear();
+    const mm = pad(d.getMonth() + 1);
+    const dd = pad(d.getDate());
+    const hh = pad(d.getHours());
+    const min = pad(d.getMinutes());
+    return `${yyyy}-${mm}-${dd}T${hh}:${min}`;
+  };
+
   const saveFlight = async () => {
     if (!flightForm.airline || !flightForm.flightNumber || !flightForm.departure) {
-      setMessage("Please fill Airline, Flight Number, and Departure");
+      setMessage("Please fill Airline, Flight Number, and Departure Time");
       return;
     }
 
-    if (editingIndex === null) {
-      // Create new flight
-      try {
-        const res = await fetch(buildPath(`add-flight/${userId}/${tripId}`), {
-          method: "POST",
-          body: JSON.stringify(flightForm),
-          headers: { "Content-Type": "application/json" },
-        });
-        const data = await res.json();
-        if (data.error) setMessage(data.error);
-        else {
-          setFlights([...flights, data.flight]);
-          setShowModal(false);
-        }
-      } catch (err: any) {
-        setMessage(err instanceof Error ? err.message : String(err));
-      }
-    } else {
-      // Update existing flight
-      const flightId = flights[editingIndex]._id;
-      if (!flightId) return;
+    try {
+      const url = editingIndex === null
+        ? buildPath(`add-flight/${userId}/${tripId}`)
+        : buildPath(`edit-flight/${userId}/${tripId}/${flights[editingIndex]._id}`);
 
-      try {
-        const res = await fetch(buildPath(`edit-flight/${userId}/${tripId}/${flightId}`), {
-          method: "POST",
-          body: JSON.stringify(flightForm),
-          headers: { "Content-Type": "application/json" },
-        });
-        const data = await res.json();
-        if (data.error) setMessage(data.error);
-        else {
-          const updated = [...flights];
-          updated[editingIndex] = { ...flightForm, _id: flightId };
-          setFlights(updated);
-          setShowModal(false);
-        }
-      } catch (err: any) {
-        console.error(err);
-        setMessage("Failed to update flight.");
-      }
+      await fetch(url, {
+        method: editingIndex === null ? "POST" : "PUT",
+        body: JSON.stringify(flightForm),
+        headers: { "Content-Type": "application/json" },
+      });
+
+      setShowModal(false); // close the modal
+    } catch (err: any) {
+      setMessage(err instanceof Error ? err.message : String(err));
     }
   };
 
@@ -120,12 +109,10 @@ function TripFlight({ tripId }: TripFlightProps) {
     if (!flightId) return;
 
     try {
-      const res = await fetch(buildPath(`delete-flight/${userId}/${tripId}/${flightId}`), {
+      await fetch(buildPath(`delete-flight/${userId}/${tripId}/${flightId}`), {
         method: "DELETE",
       });
-      const data = await res.json();
-      if (data.error) setMessage(data.error);
-      else setFlights(flights.filter((_, i) => i !== index));
+      setShowModal(false); // close the modal
     } catch (err: any) {
       console.error(err);
       setMessage("Failed to delete flight.");
