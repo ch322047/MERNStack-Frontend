@@ -126,6 +126,15 @@ function Trips() {
 
   return (
     <div className="trips-page">
+
+      <input
+        className="modal"
+        type="text"
+        placeholder="Search Trips..."
+        value={search}
+        onChange={(e) => setSearchValue(e.target.value)}
+      />
+
       <div className="trip-grid">
         {/* Add Trip Card */}
         <div className="trip-card add-card" onClick={() => setShowNewTripForm(true)}>
