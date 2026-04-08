@@ -137,10 +137,6 @@ function TripHotel({ tripId }: TripHotelProps) {
   return (
     <div className="trip-page">
       <div className="trip-grid">
-        {/* Add Hotel Card */}
-        <div className="trip-card add-card" onClick={handleAddClick}>
-          + Add Hotel
-        </div>
 
         {/* Hotel Cards */}
         {hotels.map((h, i) => (
@@ -152,6 +148,11 @@ function TripHotel({ tripId }: TripHotelProps) {
           </div>
         ))}
       </div>
+
+      {/* Add Hotel Card */}
+      <button className="add-trip-btn" onClick={handleAddClick}>
+        + Add Hotel
+      </button>
 
       {/* Modal */}
       {showModal && (
@@ -186,15 +187,13 @@ function TripHotel({ tripId }: TripHotelProps) {
               />
             </div>
 
-            <div className="modal-field">
-              <label>
+            <div className="modal-field booked-field">
+              <label>Booked</label>
                 <input
                   type="checkbox"
                   checked={hotelForm.booked}
                   onChange={(e) => setHotelForm({ ...hotelForm, booked: e.target.checked })}
                 />
-                Booked
-              </label>
             </div>
 
             <div className="modal-buttons">

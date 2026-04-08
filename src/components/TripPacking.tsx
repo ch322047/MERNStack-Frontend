@@ -22,7 +22,7 @@ function TripPacking({ tripId }: TripPackingProps) {
   const buildPath = (route: string) =>
     `https://lampstackprojectgroup9.com/api/${route}`;
 
-  // Fetch packing list on mount
+  // Fetch packing list
   useEffect(() => {
     async function fetchPackingList() {
       try {
@@ -37,26 +37,19 @@ function TripPacking({ tripId }: TripPackingProps) {
     fetchPackingList();
   }, [tripId]);
 
-  // Add new item
+  // Add item
   const addItem = async () => {
     const newItem: PackingItem = { item: "", packed: false };
     try {
-      const res = await fetch(
-        buildPath(`add-to-packing-list/${userId}/${tripId}`),
-        {
-          method: "POST",
-          body: JSON.stringify(newItem),
-          headers: { "Content-Type": "application/json" },
-        }
-      );
+      const res = await fetch(buildPath(`add-to-packing-list/${userId}/${tripId}`), {
+        method: "POST",
+        body: JSON.stringify(newItem),
+        headers: { "Content-Type": "application/json" },
+      });
       const data = await res.json();
       if (data.error) setMessage(data.error);
-      else {
-        setItems([...items, data.item]);
-        setMessage(data.message || "Item added");
-      }
+      else setItems([...items, data.item]);
     } catch (err: any) {
-      console.error(err);
       setMessage("Network error");
     }
   };
@@ -81,9 +74,7 @@ function TripPacking({ tripId }: TripPackingProps) {
       );
       const data = await res.json();
       if (data.error) setMessage(data.error);
-      else setMessage(data.message || "Item updated");
     } catch (err: any) {
-      console.error(err);
       setMessage("Network error");
     }
   };
@@ -100,43 +91,44 @@ function TripPacking({ tripId }: TripPackingProps) {
         { method: "DELETE" }
       );
       const data = await res.json();
-      if (data.error) setMessage(data.error);
-      else {
+      if (!data.error) {
         updated.splice(index, 1);
         setItems(updated);
-        setMessage(data.message || "Item deleted");
-      }
+      } else setMessage(data.error);
     } catch (err: any) {
-      console.error(err);
       setMessage("Network error");
     }
   };
 
   return (
     <div className="tab-section">
-      <button className="add-btn" onClick={addItem}>
+      <button className="add-trip-btn" onClick={addItem}>
         + Add Item
       </button>
-      {items.map((i, idx) => (
-        <div key={idx} className="packing-item">
-          <input
-            placeholder="Item"
-            value={i.item}
-            onChange={(e) => updateItem(idx, "item", e.target.value)}
-          />
-          <label>
+
+      <div className="packing-list">
+        {items.map((i, idx) => (
+          <div key={idx} className="packing-item">
             <input
-              type="checkbox"
-              checked={i.packed || false}
-              onChange={(e) => updateItem(idx, "packed", e.target.checked)}
+              placeholder="Item"
+              value={i.item}
+              onChange={(e) => updateItem(idx, "item", e.target.value)}
             />
-            Packed
-          </label>
-          <button className="delete-btn" onClick={() => deleteItem(idx)}>
-            Delete
-          </button>
-        </div>
-      ))}
+            <label className="packed-label">
+              <input
+                type="checkbox"
+                checked={i.packed || false}
+                onChange={(e) => updateItem(idx, "packed", e.target.checked)}
+              />
+              Packed
+            </label>
+            <button className="delete-btn" onClick={() => deleteItem(idx)}>
+              Delete
+            </button>
+          </div>
+        ))}
+      </div>
+
       {message && <p className="message">{message}</p>}
     </div>
   );

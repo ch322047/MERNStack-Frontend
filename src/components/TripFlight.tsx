@@ -139,10 +139,6 @@ function TripFlight({ tripId }: TripFlightProps) {
   return (
     <div className="trip-page">
       <div className="trip-grid">
-        {/* Add Flight Card */}
-        <div className="trip-card add-card" onClick={handleAddClick}>
-          + Add Flight
-        </div>
 
         {/* Flight Cards */}
         {flights.map((f, i) => (
@@ -154,6 +150,11 @@ function TripFlight({ tripId }: TripFlightProps) {
           </div>
         ))}
       </div>
+      
+      {/* Add Flight Card */}
+      <button className="add-trip-btn" onClick={handleAddClick}>
+        + Add Flight
+      </button>
 
       {/* Modal */}
       {showModal && (

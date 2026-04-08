@@ -386,44 +386,39 @@ button[type="submit"]:hover {
   box-shadow: 0 0 20px rgba(0, 150, 255, 0.2);
 }
 
-/* TRIP SUBSECTION STYLING */
-.tripsection-page {
-  padding: 20px;
+.booked-field {
+  display: flex;
+  align-items: center; /* vertically center checkbox and text */
+  gap: 8px; /* space between checkbox and label text */
+  margin-top: 8px;
+}
+
+.packing-list {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 12px; /* space between items */
 }
 
-/* Grid for flight cards */
-.tripsection-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 20px;
-}
-
-/* General flight card style */
-.tripsection-card {
-  background: #fff;
-  border-radius: 12px;
-  padding: 16px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  cursor: pointer;
-  transition: transform 0.15s, box-shadow 0.15s;
-}
-
-.tripsection-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-}
-
-/* Add Flight specific styling */
-.tripsection-card.add-card {
+.packing-item {
   display: flex;
   align-items: center;
-  justify-content: center;
-  font-weight: bold;
-  font-size: 1.2rem;
-  color: #555;
-  background: #f0f0f0;
-  border: 2px dashed #ccc;
+  gap: 12px;
+  padding: 8px 12px;
+  background: #f9f9f9;
+  border-radius: 8px;
+}
+
+.packed-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.add-floating-btn {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  font-size: 1rem;
+  padding: 12px 20px;
+  z-index: 50;
 }
