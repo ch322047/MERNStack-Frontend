@@ -9,7 +9,7 @@ import "../index.css";
 function TripDetails() {
   const { tripId } = useParams();
   console.log(tripId);
-  const [tripName, setTripName] = useState("");
+  const [trip, setTrip] = useState<any>(null);
   const [activeTab, setActiveTab] = useState("Flights");
   const [message, setMessage] = useState("");
 
@@ -27,9 +27,9 @@ function TripDetails() {
 
         if (data.error) {
           setMessage(data.error);
-          setTripName("");
+          setTrip(null);
         } else {
-          setTripName(data.trip?.name || "Unnamed Trip");
+          setTrip(data.trip || null);
         }
       } catch (err: any) {
         console.error(err);
@@ -57,11 +57,29 @@ function TripDetails() {
     }
   };
 
+  function getDaysAway(dateStr: string) {
+    const today = new Date();
+    const target = new Date(dateStr);
+    const diff = Math.ceil((target.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
+    return diff > 0 ? diff : 0;
+  }
+
   return (
     <div className="details-page">
       {/* SIDEBAR */}
       <aside className="details-sidebar">
-        <h2 className="details-title">{tripName}</h2>
+        {trip ? (
+          <div className="trip-card sidebar-card">
+            <h2 className="trip-name">{trip.name}</h2>
+            <p className="trip-destination">{trip.destination}</p>
+            <p className={`trip-status status-${trip.status.toLowerCase()}`}>
+              {trip.status}
+            </p>
+            <p className="trip-countdown">{getDaysAway(trip.startDate)}</p>
+          </div>
+        ) : (
+          <p>Loading trip info...</p>
+        )}
 
         {["Flights", "Hotels", "Itinerary", "Packing List"].map((tab) => (
           <button

@@ -35,8 +35,7 @@ function TripFlight({ tripId }: TripFlightProps) {
     `https://lampstackprojectgroup9.com/api/${route}`;
 
   // Fetch flights from trip
-  useEffect(() => {
-    async function fetchFlights() {
+  const fetchFlights = async () => {
       try {
         const res = await fetch(buildPath(`get-trip/${tripId}`));
         const data = await res.json();
@@ -47,6 +46,9 @@ function TripFlight({ tripId }: TripFlightProps) {
         setMessage("Failed to load flights.");
       }
     }
+  
+  // initial refresh
+  useEffect(() => {
     fetchFlights();
   }, [tripId]);
 
@@ -98,6 +100,7 @@ function TripFlight({ tripId }: TripFlightProps) {
       });
 
       setShowModal(false); // close the modal
+      fetchFlights(); //refresh flight list
     } catch (err: any) {
       setMessage(err instanceof Error ? err.message : String(err));
     }
@@ -113,6 +116,7 @@ function TripFlight({ tripId }: TripFlightProps) {
         method: "DELETE",
       });
       setShowModal(false); // close the modal
+      fetchFlights(); //refresh flight list
     } catch (err: any) {
       console.error(err);
       setMessage("Failed to delete flight.");
@@ -120,16 +124,16 @@ function TripFlight({ tripId }: TripFlightProps) {
   };
 
   return (
-    <div className="flights-page">
-      <div className="flight-grid">
+    <div className="tripsection-page">
+      <div className="tripsection-grid">
         {/* Add Flight Card */}
-        <div className="flight-card add-card" onClick={handleAddClick}>
+        <div className="tripsection-card add-card" onClick={handleAddClick}>
           + Add Flight
         </div>
 
         {/* Flight Cards */}
         {flights.map((f, i) => (
-          <div key={i} className="flight-card" onClick={() => handleEditClick(i)}>
+          <div key={i} className="tripsection-card" onClick={() => handleEditClick(i)}>
             <h3>{f.airline}</h3>
             <p>{f.flightNumber}</p>
             <p>Departure: {new Date(f.departure).toLocaleString()}</p>
