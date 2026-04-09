@@ -63,13 +63,13 @@ h1 {
 }
 
 .tabs button.active {
-  background-color: #646cff;
+  background-color: #00cfff;
   color: white;
   font-weight: 600;
 }
 
 .tabs button:hover {
-  background-color: #535bf2;
+  background-color: #00bce7;
   color: white;
 }
 
@@ -91,7 +91,7 @@ input {
 
 input:focus {
   outline: none;
-  border-color: #646cff;
+  border-color: #00cfff;
 }
 
 button[type="submit"] {
@@ -99,7 +99,7 @@ button[type="submit"] {
   width: 70%;
   padding: 0.50em 1em;
   border-radius: 999px;
-  background-color: #646cff;
+  background-color: #00cfff;
   color: white;
   font-weight: 600;
   font-size: 1.05rem;
@@ -108,9 +108,9 @@ button[type="submit"] {
 }
 
 button[type="submit"]:hover {
-  background-color: #535bf2;
+  background-color: #00bce7;
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(100, 108, 255, 0.4);
+  box-shadow: 0 4px 12px rgba(0, 150, 255, 0.3);
 }
 
 /* trips page */

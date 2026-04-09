@@ -140,7 +140,7 @@ function TripItinerary({ tripId }: TripItineraryProps) {
     try {
       const url = editingActivity
         ? buildPath(
-            `edit-activity/${userId}/${tripId}/${selectedDay._id}/${editingActivity._id}`
+            `edit-itinerary-day-activity/${userId}/${tripId}/${selectedDay._id}/${editingActivity._id}`
           )
         : buildPath(
             `add-itinerary-day-activity/${userId}/${tripId}/${selectedDay._id}`
@@ -170,6 +170,7 @@ function TripItinerary({ tripId }: TripItineraryProps) {
         { method: "DELETE" }
       );
 
+      setShowActivityModal(false);
       fetchTrip();
     } catch {
       setMessage("Failed to delete activity.");
