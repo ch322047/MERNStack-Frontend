@@ -8,6 +8,11 @@ import "../index.css";
 
 function TripDetails() {
   const navigate = useNavigate();
+
+    // Get user from localStorage
+  const stored = localStorage.getItem('user_data');
+  const user = stored ? JSON.parse(stored) : null;
+  const userId = user?.id;
   
   const { tripId } = useParams();
   console.log(tripId);
@@ -104,7 +109,7 @@ function TripDetails() {
         endDate: new Date(tripForm.endDate).toISOString(),
       };
 
-      const res = await fetch(`https://lampstackprojectgroup9.com/api/edit-trip/${tripId}`, {
+      const res = await fetch(`https://lampstackprojectgroup9.com/api/edit-trip/${userId}/${tripId}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
@@ -128,7 +133,7 @@ function TripDetails() {
       if (!tripId) return;
 
       try {
-        await fetch(`https://lampstackprojectgroup9.com/api/delete-trip/${tripId}`, {
+        await fetch(`https://lampstackprojectgroup9.com/api/delete-trip/${userId}${tripId}`, {
           method: "DELETE",
         });
         setShowTripModal(false);
