@@ -15,7 +15,6 @@ function TripDetails() {
   const userId = user?.id;
   
   const { tripId } = useParams();
-  console.log(tripId);
   const [trip, setTrip] = useState<any>(null);
   const [activeTab, setActiveTab] = useState("Flights");
   const [message, setMessage] = useState("");
@@ -103,17 +102,26 @@ function TripDetails() {
 
   const saveTrip = async () => {
     try {
+      // Only convert valid dates
+      const startDateISO = tripForm.startDate ? new Date(tripForm.startDate).toISOString() : null;
+      const endDateISO = tripForm.endDate ? new Date(tripForm.endDate).toISOString() : null;
+
       const payload = {
-        ...tripForm,
-        startDate: new Date(tripForm.startDate).toISOString(),
-        endDate: new Date(tripForm.endDate).toISOString(),
+        name: tripForm.name,
+        destination: tripForm.destination,
+        startDate: startDateISO,
+        endDate: endDateISO,
+        status: tripForm.status,
       };
 
-      const res = await fetch(`https://lampstackprojectgroup9.com/api/edit-trip/${userId}/${tripId}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
+      const res = await fetch(
+        `https://lampstackprojectgroup9.com/api/edit-trip/${userId}/${tripId}`,
+        {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        }
+      );
 
       const data = await res.json();
 
@@ -121,6 +129,8 @@ function TripDetails() {
         setMessage(data.error);
       } else {
         setShowTripModal(false);
+        // Optionally refresh trip data
+        setTrip({ ...trip, ...payload });
       }
     } catch (err: any) {
       console.error(err);
@@ -133,7 +143,7 @@ function TripDetails() {
       if (!tripId) return;
 
       try {
-        await fetch(`https://lampstackprojectgroup9.com/api/delete-trip/${userId}${tripId}`, {
+        await fetch(`https://lampstackprojectgroup9.com/api/delete-trip/${userId}/${tripId}`, {
           method: "DELETE",
         });
         setShowTripModal(false);
