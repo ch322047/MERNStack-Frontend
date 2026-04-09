@@ -104,13 +104,11 @@ function TripDetails() {
     try {
       // Only convert valid dates
       const startDateISO = tripForm.startDate ? new Date(tripForm.startDate).toISOString() : null;
-      const endDateISO = tripForm.endDate ? new Date(tripForm.endDate).toISOString() : null;
 
       const payload = {
         name: tripForm.name,
         destination: tripForm.destination,
         startDate: startDateISO,
-        endDate: endDateISO,
         status: tripForm.status,
       };
 
@@ -129,7 +127,7 @@ function TripDetails() {
         setMessage(data.error);
       } else {
         setShowTripModal(false);
-        // Optionally refresh trip data
+        // Refresh trip data
         setTrip({ ...trip, ...payload });
       }
     } catch (err: any) {
