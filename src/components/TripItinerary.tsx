@@ -247,15 +247,8 @@ function TripItinerary({ tripId }: TripItineraryProps) {
             {(selectedDay.activities || []).map((a, i) => (
               <div key={i} className="trip-card" onClick={() => openEditActivity(a)}>
                 <h3>{a.name || "New Activity"}</h3>
-                <p>{a.time || "-"}</p>
+                <p>{a.time ? new Date(a.time).toLocaleString() : "-"}</p>
                 <p>{a.location || "-"}</p>
-
-                <button
-                  className="delete-btn"
-                  onClick={() => deleteActivity(a._id)}
-                >
-                  Delete
-                </button>
               </div>
             ))}
           </div>
@@ -326,7 +319,7 @@ function TripItinerary({ tripId }: TripItineraryProps) {
           </button>
 
           <button
-            className="delete-btn"
+            className="delete-day-btn"
             onClick={() => deleteDay(selectedDay._id)}
           >
             Delete Day
