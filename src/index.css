@@ -355,7 +355,7 @@ button[type="submit"]:hover {
 /* DETAILS PAGE LAYOUT*/
 .details-page {
   display: flex;
-  height: 100vh;
+  /* height: 100vh; */
   color: white;
 }
 
