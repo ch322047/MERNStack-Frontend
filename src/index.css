@@ -245,6 +245,7 @@ button[type="submit"]:hover {
   border: none;
   background: #0b1a2e;
   color: white;
+  color-scheme: dark; /* Makes calendar & clock icons white */
 }
 
 /* BUTTONS */
