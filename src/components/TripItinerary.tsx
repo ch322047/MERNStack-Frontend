@@ -104,17 +104,16 @@ function TripItinerary({ tripId }: TripItineraryProps) {
   const openEditActivity = (activity: Activity) => {
     setEditingActivity(activity);
 
-    const format = (dateStr: string) => {
+    const formatTime = (dateStr: string) => {
       if (!dateStr) return "";
       const d = new Date(dateStr);
       const pad = (n: number) => n.toString().padStart(2, "0");
-
-      return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
+      return `${pad(d.getHours())}:${pad(d.getMinutes())}`; // HH:MM only
     };
 
     setActivityForm({
       ...activity,
-      time: format(activity.time),
+      time: formatTime(activity.time), // just the time part
     });
 
     setShowActivityModal(true);
@@ -128,9 +127,14 @@ function TripItinerary({ tripId }: TripItineraryProps) {
       return;
     }
 
+    const [hours, minutes] = activityForm.time.split(":");
+    const date = new Date(selectedDay.date);
+    date.setHours(parseInt(hours), parseInt(minutes), 0, 0); // set hours and minutes
+    const isoTime = date.toISOString(); // valid full ISO string for API
+
     const payload = {
       ...activityForm,
-      time: new Date(activityForm.time).toISOString(),
+      time: isoTime,
     };
 
     try {
