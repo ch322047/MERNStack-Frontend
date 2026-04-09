@@ -109,7 +109,7 @@ function TripPacking({ tripId }: TripPackingProps) {
         ))}
       </div>
 
-      <button className="add-floating-btn" onClick={handleAddClick}>
+      <button className="add-trip-btn" onClick={handleAddClick}>
         + Add Item
       </button>
 
