@@ -130,7 +130,7 @@ function Auth() {
           login: registerLogin,
           email,
         }),
-        headers: { 'Content-Type': 'application.json' },
+        headers: { 'Content-Type': 'application/json' },
       });
 
       let res;
