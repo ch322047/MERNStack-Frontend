@@ -339,7 +339,7 @@ button[type="submit"]:hover {
   transition: 0.2s;
 }
 
-.details-tab:hover {
+.back-btn:hover {
   background: rgba(0, 200, 255, 0.1);
 }
 

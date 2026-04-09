@@ -247,7 +247,7 @@ function TripItinerary({ tripId }: TripItineraryProps) {
             {(selectedDay.activities || []).map((a, i) => (
               <div key={i} className="trip-card" onClick={() => openEditActivity(a)}>
                 <h3>{a.name || "New Activity"}</h3>
-                <p>{a.time ? new Date(a.time).toLocaleString() : "-"}</p>
+                <p>{a.time || "-"}</p>
                 <p>{a.location || "-"}</p>
               </div>
             ))}
@@ -271,7 +271,7 @@ function TripItinerary({ tripId }: TripItineraryProps) {
                 <div className="modal-field">
                   <label>Time</label>
                   <input
-                    type="datetime-local"
+                    type="time"
                     value={activityForm.time}
                     onChange={(e) =>
                       setActivityForm({ ...activityForm, time: e.target.value })
