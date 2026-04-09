@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import TripFlight from "../components/TripFlight";
 import TripHotel from "../components/TripHotel";
 import TripItinerary from "../components/TripItinerary";
@@ -7,6 +7,8 @@ import TripPacking from "../components/TripPacking";
 import "../index.css";
 
 function TripDetails() {
+  const navigate = useNavigate();
+  
   const { tripId } = useParams();
   console.log(tripId);
   const [trip, setTrip] = useState<any>(null);
@@ -88,6 +90,10 @@ function TripDetails() {
             {tab}
           </button>
         ))}
+
+        <button className="back-btn" onClick={() => navigate("/trips")}>
+          ← Back
+        </button>
       </aside>
 
       {/* MAIN CONTENT */}
