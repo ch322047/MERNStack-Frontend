@@ -102,14 +102,16 @@ function TripDetails() {
 
   const saveTrip = async () => {
     try {
-      // Only convert valid dates
-      const startDateISO = tripForm.startDate ? new Date(tripForm.startDate).toISOString() : null;
+      const toLocalMidnightISO = (dateStr: string) => {
+        const [year, month, day] = dateStr.split('-').map(Number);
+        const d = new Date(year, month - 1, day, 0, 0, 0);
+        return d.toISOString();
+      };
 
       const payload = {
-        name: tripForm.name,
-        destination: tripForm.destination,
-        startDate: startDateISO,
-        status: tripForm.status,
+        ...tripForm,
+        startDate: toLocalMidnightISO(tripForm.startDate),
+        endDate: toLocalMidnightISO(tripForm.endDate),
       };
 
       const res = await fetch(
@@ -226,9 +228,9 @@ function TripDetails() {
                   value={tripForm.status}
                   onChange={(e) => setTripForm({ ...tripForm, status: e.target.value })}
                 >
-                  <option value="planned">Planning</option>
-                  <option value="ongoing">Active</option>
-                  <option value="complete">Completed</option>
+                  <option value="planning">Planning</option>
+                  <option value="active">Active</option>
+                  <option value="completed">Completed</option>
                 </select>
               </div>
 
