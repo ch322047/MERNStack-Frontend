@@ -15,6 +15,15 @@ function TripDetails() {
   const [activeTab, setActiveTab] = useState("Flights");
   const [message, setMessage] = useState("");
 
+  const [showTripModal, setShowTripModal] = useState(false);
+  const [tripForm, setTripForm] = useState({
+    name: "",
+    destination: "",
+    startDate: "",
+    endDate: "",
+    status: "",
+  });
+
   // Early return if tripId is missing
   if (!tripId) return <div className="message">Error: No trip selected.</div>;
 
@@ -66,12 +75,76 @@ function TripDetails() {
     return diff > 0 ? diff : 0;
   }
 
+  const openEditTripModal = () => {
+    if (!trip) return;
+
+    const formatDateInput = (dateStr: string) => {
+      if (!dateStr) return "";
+      const d = new Date(dateStr);
+      const pad = (n: number) => n.toString().padStart(2, "0");
+      return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+    };
+
+    setTripForm({
+      name: trip.name || "",
+      destination: trip.destination || "",
+      startDate: formatDateInput(trip.startDate),
+      endDate: formatDateInput(trip.endDate),
+      status: trip.status || "planned",
+    });
+
+    setShowTripModal(true);
+  };
+
+  const saveTrip = async () => {
+    try {
+      const payload = {
+        ...tripForm,
+        startDate: new Date(tripForm.startDate).toISOString(),
+        endDate: new Date(tripForm.endDate).toISOString(),
+      };
+
+      const res = await fetch(`https://lampstackprojectgroup9.com/api/edit-trip/${tripId}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+
+      const data = await res.json();
+
+      if (data.error) {
+        setMessage(data.error);
+      } else {
+        setShowTripModal(false);
+      }
+    } catch (err: any) {
+      console.error(err);
+      setMessage("Failed to save trip.");
+    }
+  };
+
+    // Delete trip
+    const deleteTrip = async () => {
+      if (!tripId) return;
+
+      try {
+        await fetch(`https://lampstackprojectgroup9.com/api/delete-trip/${tripId}`, {
+          method: "DELETE",
+        });
+        setShowTripModal(false);
+        navigate("/trips"); // go back to trips page after deletion
+      } catch (err) {
+        console.error(err);
+        setMessage("Failed to delete trip.");
+      }
+    };
+
   return (
     <div className="details-page">
       {/* SIDEBAR */}
       <aside className="details-sidebar">
         {trip ? (
-          <div className="trip-card sidebar-card">
+          <div className="trip-card sidebar-card" onClick={openEditTripModal}>
             <h2 className="trip-name">{trip.name}</h2>
             <p className="trip-destination">{trip.destination}</p>
             <p className="trip-status">{trip.status.toUpperCase()} </p>
@@ -94,6 +167,68 @@ function TripDetails() {
         <button className="back-btn" onClick={() => navigate("/trips")}>
           ← Back
         </button>
+
+        {showTripModal && (
+          <div className="modal-overlay">
+            <div className="modal">
+              <h2>Edit Trip</h2>
+
+              <div className="modal-field">
+                <label>Name</label>
+                <input
+                  value={tripForm.name}
+                  onChange={(e) => setTripForm({ ...tripForm, name: e.target.value })}
+                />
+              </div>
+
+              <div className="modal-field">
+                <label>Destination</label>
+                <input
+                  value={tripForm.destination}
+                  onChange={(e) => setTripForm({ ...tripForm, destination: e.target.value })}
+                />
+              </div>
+
+              <div className="modal-field">
+                <label>Start Date</label>
+                <input
+                  type="date"
+                  value={tripForm.startDate}
+                  onChange={(e) => setTripForm({ ...tripForm, startDate: e.target.value })}
+                />
+              </div>
+
+              <div className="modal-field">
+                <label>End Date</label>
+                <input
+                  type="date"
+                  value={tripForm.endDate}
+                  onChange={(e) => setTripForm({ ...tripForm, endDate: e.target.value })}
+                />
+              </div>
+
+              <div className="modal-field">
+                <label>Status</label>
+                <select
+                  value={tripForm.status}
+                  onChange={(e) => setTripForm({ ...tripForm, status: e.target.value })}
+                >
+                  <option value="planned">Planning</option>
+                  <option value="ongoing">Active</option>
+                  <option value="complete">Completed</option>
+                </select>
+              </div>
+
+              <div className="modal-buttons">
+                <button className="confirm-btn" onClick={saveTrip}>SAVE</button>
+                <button className="delete-btn" onClick={deleteTrip}>
+                  DELETE
+                </button>
+                <button className="cancel-btn" onClick={() => setShowTripModal(false)}>CANCEL</button>
+              </div>
+            </div>
+          </div>
+        )}
       </aside>
 
       {/* MAIN CONTENT */}
