@@ -18,9 +18,10 @@ function TripPacking({ tripId }: TripPackingProps) {
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
   const [itemForm, setItemForm] = useState<PackingItem>({ item: "", packed: false });
 
-  const stored = localStorage.getItem("user_data");
-  const ud = stored && stored !== "undefined" ? JSON.parse(stored) : { id: -1 };
-  const userId: string = ud.id;
+  //const stored = localStorage.getItem("user_data");
+  //const ud = stored && stored !== "undefined" ? JSON.parse(stored) : { id: -1 };
+  //const userId: string = ud.id;
+  const token = localStorage.getItem('token');
 
   const buildPath = (route: string) =>
     `https://lampstackprojectgroup9.com/api/${route}`;
@@ -28,7 +29,7 @@ function TripPacking({ tripId }: TripPackingProps) {
   // Fetch packing list
   const fetchItems = async () => {
     try {
-      const res = await fetch(buildPath(`get-trip/${tripId}`));
+      const res = await fetch(buildPath(`get-trip/${tripId}`),{ headers:{ Authorization: `Bearer ${token}` } });
       const data = await res.json();
       setItems(data.trip?.packingList || []);
     } catch (err: any) {
@@ -66,13 +67,13 @@ function TripPacking({ tripId }: TripPackingProps) {
     try {
       const url =
         editingIndex === null
-          ? buildPath(`add-to-packing-list/${userId}/${tripId}`)
-          : buildPath(`edit-packing-list/${userId}/${tripId}/${items[editingIndex]._id}`);
+          ? buildPath(`add-to-packing-list/${tripId}`)
+          : buildPath(`edit-packing-list/${tripId}/${items[editingIndex]._id}`);
 
       await fetch(url, {
         method: editingIndex === null ? "POST" : "PUT",
         body: JSON.stringify(payload),
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
       });
 
       setShowModal(false);
@@ -87,8 +88,9 @@ function TripPacking({ tripId }: TripPackingProps) {
     if (!itemId) return;
 
     try {
-      await fetch(buildPath(`delete-PackingList/${userId}/${tripId}/${itemId}`), {
+      await fetch(buildPath(`delete-PackingList/${tripId}/${itemId}`), {
         method: "DELETE",
+        headers:{ Authorization: `Bearer ${token}` },
       });
       setShowModal(false);
       fetchItems();
