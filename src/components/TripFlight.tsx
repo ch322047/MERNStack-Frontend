@@ -17,6 +17,7 @@ function TripFlight({ tripId }: TripFlightProps) {
   const stored = localStorage.getItem("user_data");
   const ud = stored && stored !== "undefined" ? JSON.parse(stored) : { id: -1 };
   const userId: string = ud.id;
+  const token = localStorage.getItem('token');
 
   const [flights, setFlights] = useState<Flight[]>([]);
   const [message, setMessage] = useState("");
@@ -37,7 +38,7 @@ function TripFlight({ tripId }: TripFlightProps) {
   // Fetch flights from trip
   const fetchFlights = async () => {
       try {
-        const res = await fetch(buildPath(`get-trip/${tripId}`));
+        const res = await fetch(buildPath(`get-trip/${tripId}`,{ headers:{ Authorization: `Bearer ${token}` } }));
         const data = await res.json();
         if (data.error) setMessage(data.error);
         else setFlights((data.trip?.flights || []).filter((f: any) => f));
@@ -109,7 +110,7 @@ function TripFlight({ tripId }: TripFlightProps) {
       await fetch(url, {
         method: editingIndex === null ? "POST" : "PUT",
         body: JSON.stringify(payload),
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
       });
 
       setShowModal(false); 
@@ -127,6 +128,7 @@ function TripFlight({ tripId }: TripFlightProps) {
     try {
       await fetch(buildPath(`delete-flight/${userId}/${tripId}/${flightId}`), {
         method: "DELETE",
+        headers:{ Authorization: `Bearer ${token}`},
       });
       setShowModal(false); // close the modal
       fetchFlights(); //refresh flight list
