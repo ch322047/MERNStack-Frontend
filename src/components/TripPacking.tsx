@@ -48,13 +48,13 @@ function TripPacking({ tripId }: TripPackingProps) {
     setItemForm({ item: "", packed: false });
     setShowModal(true);
   };
-
+  /*
   // Open modal for editing
   const handleEditClick = (index: number) => {
     setEditingIndex(index);
     setItemForm({ ...items[index] });
     setShowModal(true);
-  };
+  };*/
 
   // Check an item.
   const handleCheckItem = (index: number) => {
@@ -115,7 +115,7 @@ function TripPacking({ tripId }: TripPackingProps) {
             <input
               type="checkbox"
               checked={itemForm.packed}
-              onChange={handleCheckItem(idx)}
+              onChange={() => handleCheckItem(idx)}
             />
             <p>{i.item}</p>
           </div>
