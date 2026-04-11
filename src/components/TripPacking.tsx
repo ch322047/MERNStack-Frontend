@@ -55,6 +55,7 @@ function TripPacking({ tripId }: TripPackingProps) {
     setItemForm({ ...items[index] });
     //setShowModal(true);
     
+    const div = 
   };
 
   // Check an item.
@@ -130,7 +131,7 @@ function TripPacking({ tripId }: TripPackingProps) {
 
   return (
     <div className="trip-page">
-      <div className="trip-list">
+      <div className="trip-list" id="itemsListDiv">
         {items.map((i, idx) => (
           <div key={idx} className="trip-entry" onClick={() => handleEditClick(idx)}>
             <input
@@ -138,15 +139,19 @@ function TripPacking({ tripId }: TripPackingProps) {
               checked={items[idx].packed}
               onChange={(e) => handleCheckItem(idx, e.target.checked)}
             />
-            <p>{i.item}</p>
-            <input
-              placeholder="Item"
-              value={items[idx].item}
-              onChange={(e) => setItemForm({ ...itemForm, item: e.target.value })}
-            />
-            <button className="delete-btn" onClick={() => deleteItem(idx)}>
-              DELETE
-            </button>
+            {editingIndex != idx && (
+              <p>{i.item}</p>
+            )}
+            {editingIndex === idx && (
+              <input
+                placeholder="Item"
+                value={items[idx].item}
+                onChange={(e) => setItemForm({ ...itemForm, item: e.target.value })}
+              />
+              <button className="delete-btn" onClick={() => deleteItem(idx)}>
+                DELETE
+              </button>
+            )}
           </div>
         ))}
         <button className="add-item-btn" onClick={handleAddClick}>
