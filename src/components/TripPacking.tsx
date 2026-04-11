@@ -57,11 +57,29 @@ function TripPacking({ tripId }: TripPackingProps) {
   };*/
 
   // Check an item.
-  const handleCheckItem = (index: number) => {
+  const handleCheckItem = (index: number, checked: boolean) => {
     setEditingIndex(index);
     setItemForm({ ...items[index] });
     //setShowModal(false);
-    saveItem();
+
+    // update item in array
+    items[index].packed = checked;
+
+    // save changes
+    try {
+      const url = buildPath(`edit-packing-list/${tripId}/${items[index]._id}`);
+
+      await fetch(url, {
+        method: "PUT",
+        body: JSON.stringify(payload),
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+      });
+
+      setShowModal(false);
+      fetchItems();
+    } catch (err: any) {
+      setMessage(err instanceof Error ? err.message : String(err));
+    }
   };
 
   const saveItem = async () => {
@@ -116,7 +134,7 @@ function TripPacking({ tripId }: TripPackingProps) {
             <input
               type="checkbox"
               checked={items[idx].packed}
-              onChange={() => handleCheckItem(idx)}
+              onChange={(e) => handleCheckItem(idx, e.target.checked)}
             />
             <p>{i.item}</p>
           </div>
