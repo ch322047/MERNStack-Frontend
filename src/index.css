@@ -201,12 +201,16 @@ button[type="submit"]:hover {
 
 /* ENTRY BASE */
 .trip-entry {
-  background: rgba(10, 20, 40, 0.85);
+  background: rgba(40, 52, 86, 0.85);
   border-radius: 10px;
   padding: 5px;
   cursor: pointer;
   transition: 0.2s;
   display: flex;
+}
+/* Every other entry */
+.trip-entry:nth-child(even) {
+  background: rgba(54, 69, 113, 0.85);
 }
 
 /* MODAL OVERLAY */
