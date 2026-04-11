@@ -111,7 +111,7 @@ function TripPacking({ tripId }: TripPackingProps) {
     <div className="trip-page">
       <div className="trip-list">
         {items.map((i, idx) => (
-          <div key={idx} className="trip-entry"}>
+          <div key={idx} className="trip-entry">
             <input
               type="checkbox"
               checked={itemForm.packed}
