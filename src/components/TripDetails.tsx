@@ -10,7 +10,7 @@ function TripDetails() {
   const navigate = useNavigate();
 
     // Get user from localStorage
-  const stored = localStorage.getItem('user_data');
+  //const stored = localStorage.getItem('user_data');
   //const user = stored ? JSON.parse(stored) : null;
   //const userId = user?.id; //unused
   const token = localStorage.getItem('token');
