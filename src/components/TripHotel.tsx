@@ -16,6 +16,7 @@ function TripHotel({ tripId }: TripHotelProps) {
   const stored = localStorage.getItem("user_data");
   const ud = stored && stored !== "undefined" ? JSON.parse(stored) : { id: -1 };
   const userId: string = ud.id;
+  const token = localStorage.getItem('token');
 
   const [hotels, setHotels] = useState<Hotel[]>([]);
   const [message, setMessage] = useState("");
@@ -35,7 +36,7 @@ function TripHotel({ tripId }: TripHotelProps) {
   // Fetch hotels from trip
   const fetchHotels = async () => {
     try {
-      const res = await fetch(buildPath(`get-trip/${tripId}`));
+      const res = await fetch(buildPath(`get-trip/${tripId}`),{ headers:{ Authorization: `Bearer ${token}` } });
       const data = await res.json();
       if (data.error) setMessage(data.error);
       else setHotels((data.trip?.hotels || []).filter((h: any) => h));
@@ -101,8 +102,8 @@ function TripHotel({ tripId }: TripHotelProps) {
     try {
       const url =
         editingIndex === null
-          ? buildPath(`add-hotel/${userId}/${tripId}`)
-          : buildPath(`edit-hotel/${userId}/${tripId}/${hotels[editingIndex]._id}`);
+          ? buildPath(`add-hotel/${tripId}`)
+          : buildPath(`edit-hotel/${tripId}/${hotels[editingIndex]._id}`);
 
       await fetch(url, {
         method: editingIndex === null ? "POST" : "PUT",
@@ -123,7 +124,7 @@ function TripHotel({ tripId }: TripHotelProps) {
     if (!hotelId) return;
 
     try {
-      await fetch(buildPath(`delete-hotel/${userId}/${tripId}/${hotelId}`), {
+      await fetch(buildPath(`delete-hotel/${tripId}/${hotelId}`), {
         method: "DELETE",
       });
       setShowModal(false);
