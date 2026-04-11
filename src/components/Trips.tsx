@@ -9,6 +9,7 @@ function Trips() {
   const stored = localStorage.getItem('user_data');
   const user = stored ? JSON.parse(stored) : null;
   const userId = user?.id;
+  const token = localStorage.getItem('token');
 
   const [message, setMessage] = useState('');
   const [search, setSearchValue] = useState('');
@@ -36,7 +37,7 @@ function Trips() {
     async function fetchAllTrips() {
       try {
         const response = await fetch(
-          `https://lampstackprojectgroup9.com/api/get-all-trips/${userId}`,{ headers:{ Authorization: 'Bearer ${JSON.parse(localStorage.getItem('token')}' } }
+          `https://lampstackprojectgroup9.com/api/get-all-trips/${userId}`,{ headers:{ Authorization: 'Bearer ${token}' } }
         );
         const res = await response.json();
 
@@ -74,7 +75,7 @@ function Trips() {
         `https://lampstackprojectgroup9.com/api/create-trip/${userId}`,
         {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ${JSON.parse(localStorage.getItem('token')}' },
+          headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ${token}' },
           body: JSON.stringify(obj),
         }
       );
