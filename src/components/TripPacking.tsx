@@ -57,21 +57,22 @@ function TripPacking({ tripId }: TripPackingProps) {
   };*/
 
   // Check an item.
-  const handleCheckItem = (index: number, checked: boolean) => {
+  const handleCheckItem = async (index: number, checked: boolean) => {
     setEditingIndex(index);
     setItemForm({ ...items[index] });
     //setShowModal(false);
 
     // update item in array
     items[index].packed = checked;
-
+    //const payload = { items[index] };
+    
     // save changes
     try {
       const url = buildPath(`edit-packing-list/${tripId}/${items[index]._id}`);
 
       await fetch(url, {
         method: "PUT",
-        body: JSON.stringify(payload),
+        body: JSON.stringify(items[index]),
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
       });
 
