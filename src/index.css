@@ -192,6 +192,16 @@ button[type="submit"]:hover {
   letter-spacing: 1px;
 }
 
+/* ENTRY BASE */
+.trip-entry {
+  background: rgba(10, 20, 40, 0.85);
+  border-radius: 16px;
+  padding: 10px;
+  cursor: pointer;
+  transition: 0.2s;
+  box-shadow: 0 0 15px rgba(0, 150, 255, 0.15);
+}
+
 /* MODAL OVERLAY */
 .modal-overlay {
   position: fixed;
