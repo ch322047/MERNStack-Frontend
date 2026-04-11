@@ -139,7 +139,7 @@ function TripPacking({ tripId }: TripPackingProps) {
               checked={items[idx].packed}
               onChange={(e) => handleCheckItem(idx, e.target.checked)}
             />
-            {editingIndex != idx && (
+            {editingIndex !== idx && (
               <p>{i.item}</p>
             )}
             {editingIndex === idx && (
@@ -148,6 +148,8 @@ function TripPacking({ tripId }: TripPackingProps) {
                 value={items[idx].item}
                 onChange={(e) => setItemForm({ ...itemForm, item: e.target.value })}
               />
+            )}
+            {editingIndex === idx && (
               <button className="delete-btn" onClick={() => deleteItem(idx)}>
                 DELETE
               </button>
