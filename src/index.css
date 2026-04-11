@@ -207,6 +207,7 @@ button[type="submit"]:hover {
   cursor: pointer;
   transition: 0.2s;
   display: flex;
+  justify-content: space-between;
 }
 /* Every other entry */
 .trip-entry:nth-child(even) {
