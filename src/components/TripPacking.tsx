@@ -106,16 +106,16 @@ function TripPacking({ tripId }: TripPackingProps) {
       setMessage("Failed to delete item");
     }
   };
-
+  /*onClick={() => handleEditClick(idx)*/
   return (
     <div className="trip-page">
       <div className="trip-list">
         {items.map((i, idx) => (
-          <div key={idx} className="trip-entry" onClick={/*() => handleEditClick(idx)*/}>
+          <div key={idx} className="trip-entry"}>
             <input
               type="checkbox"
               checked={itemForm.packed}
-              onChange={(e) => handleCheckItem(idx)}
+              onChange={handleCheckItem(idx)}
             />
             <p>{i.item}</p>
           </div>
