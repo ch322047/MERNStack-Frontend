@@ -213,6 +213,12 @@ button[type="submit"]:hover {
   background: rgba(54, 69, 113, 0.85);
 }
 
+/* Checkboxes on entries */
+.trip-entry>input[type="checkbox"] {
+  transform: scale(1.5);
+  margin: 5px;
+}
+
 /* MODAL OVERLAY */
 .modal-overlay {
   position: fixed;
