@@ -69,7 +69,7 @@ function Auth() {
       } else {
         // Store user info & token
         localStorage.setItem('user_data', JSON.stringify(res.user));
-        localStorage.setItem('token', JSON.stringify(res.token));
+        localStorage.setItem('token', res.token);
         navigate('/trips');
       }
     } catch (err: any) {
