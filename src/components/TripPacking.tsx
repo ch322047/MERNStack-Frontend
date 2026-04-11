@@ -61,6 +61,7 @@ function TripPacking({ tripId }: TripPackingProps) {
     setEditingIndex(index);
     setItemForm({ ...items[index] });
     //setShowModal(false);
+    saveItem();
   };
 
   const saveItem = async () => {
