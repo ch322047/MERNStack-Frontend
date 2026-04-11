@@ -102,7 +102,7 @@ function TripPacking({ tripId }: TripPackingProps) {
 
   return (
     <div className="trip-page">
-      <div className="trip-grid">
+      <div className="trip-list">
         {items.map((i, idx) => (
           <div key={idx} className="trip-entry" onClick={() => handleEditClick(idx)}>
             <p>{i.item}</p>
