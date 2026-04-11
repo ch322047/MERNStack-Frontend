@@ -253,7 +253,7 @@ function TripItinerary({ tripId }: TripItineraryProps) {
             {(selectedDay.activities || []).map((a, i) => (
               <div key={i} className="trip-card" onClick={() => openEditActivity(a)}>
                 <h3>{a.name || "New Activity"}</h3>
-                <p>{a.time ? new Date(a.time).toLocaleTimeString() : "-"}</p>
+                <p>{a.time ? new Date(a.time).toLocaleTimeString(undefined, {hour: 'numeric', minute: '2-digit'}) : "-"}</p>
                 <p>{a.location || "-"}</p>
               </div>
             ))}
