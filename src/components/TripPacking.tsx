@@ -56,6 +56,13 @@ function TripPacking({ tripId }: TripPackingProps) {
     setShowModal(true);
   };
 
+  // Check an item.
+  const handleCheckItem = (index: number) => {
+    setEditingIndex(index);
+    setItemForm({ ...items[index] });
+    //setShowModal(false);
+  };
+
   const saveItem = async () => {
     if (!itemForm.item) {
       setMessage("Please enter an item name");
@@ -104,11 +111,11 @@ function TripPacking({ tripId }: TripPackingProps) {
     <div className="trip-page">
       <div className="trip-list">
         {items.map((i, idx) => (
-          <div key={idx} className="trip-entry" onClick={() => handleEditClick(idx)}>
+          <div key={idx} className="trip-entry" onClick={/*() => handleEditClick(idx)*/}>
             <input
               type="checkbox"
               checked={itemForm.packed}
-              onChange={(e) => setItemForm({ ...itemForm, packed: e.target.checked })}
+              onChange={(e) => handleCheckItem(idx)}
             />
             <p>{i.item}</p>
           </div>
