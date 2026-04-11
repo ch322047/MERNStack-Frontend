@@ -36,7 +36,7 @@ function Trips() {
     async function fetchAllTrips() {
       try {
         const response = await fetch(
-          `https://lampstackprojectgroup9.com/api/get-all-trips/${userId}`,{ headers:{ Authorization: 'Bearer ${token}' } }
+          `https://lampstackprojectgroup9.com/api/get-all-trips/${userId}`,{ headers:{ Authorization: 'Bearer ${JSON.parse(localStorage.getItem('token')}' } }
         );
         const res = await response.json();
 
@@ -74,7 +74,7 @@ function Trips() {
         `https://lampstackprojectgroup9.com/api/create-trip/${userId}`,
         {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ${token}' },
+          headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ${JSON.parse(localStorage.getItem('token')}' },
           body: JSON.stringify(obj),
         }
       );
