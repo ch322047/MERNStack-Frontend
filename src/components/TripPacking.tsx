@@ -85,7 +85,7 @@ function TripPacking({ tripId }: TripPackingProps) {
   };
 
   // Change an item's name
-  const handleCheckItem = async (index: number, name: string) => {
+  const handleRenameItem = async (index: number, name: string) => {
     setEditingIndex(index);
     setItemForm({ ...items[index] });
 
@@ -170,7 +170,7 @@ function TripPacking({ tripId }: TripPackingProps) {
               <input autoFocus
                 placeholder="Item"
                 value={items[idx].item}
-                onBlur={(e) => setItemForm({ ...itemForm, item: e.target.value })}
+                onBlur={(e) => handleRenameItem(idx, e.target.value)}
               />
             )}
             {editingIndex === idx && (
