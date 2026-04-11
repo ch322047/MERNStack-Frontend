@@ -142,7 +142,7 @@ function TripPacking({ tripId }: TripPackingProps) {
               <p>{i.item}</p>
             )}
             {editingIndex === idx && (
-              <input
+              <input autoFocus
                 placeholder="Item"
                 value={items[idx].item}
                 onChange={(e) => setItemForm({ ...itemForm, item: e.target.value })}
