@@ -108,7 +108,7 @@ function TripHotel({ tripId }: TripHotelProps) {
       await fetch(url, {
         method: editingIndex === null ? "POST" : "PUT",
         body: JSON.stringify(payload),
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
       });
 
       setShowModal(false);
