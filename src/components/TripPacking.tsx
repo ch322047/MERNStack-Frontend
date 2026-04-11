@@ -105,15 +105,19 @@ function TripPacking({ tripId }: TripPackingProps) {
       <div className="trip-list">
         {items.map((i, idx) => (
           <div key={idx} className="trip-entry" onClick={() => handleEditClick(idx)}>
+            <input
+              type="checkbox"
+              checked={itemForm.packed}
+              onChange={(e) => setItemForm({ ...itemForm, packed: e.target.checked })}
+            />
             <p>{i.item}</p>
-            <p>Packed: {i.packed ? "Yes" : "No"}</p>
           </div>
         ))}
+        <button className="add-item-btn" onClick={handleAddClick}>
+          + Add Item
+        </button>
       </div>
 
-      <button className="add-trip-btn" onClick={handleAddClick}>
-        + Add Item
-      </button>
 
       {showModal && (
         <div className="modal-overlay">
