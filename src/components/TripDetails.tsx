@@ -36,7 +36,7 @@ function TripDetails() {
     async function fetchTrip() {
       try {
         const response = await fetch(
-          `https://lampstackprojectgroup9.com/api/get-trip/${tripId}`
+          `https://lampstackprojectgroup9.com/api/get-trip/${tripId}`,{ headers:{ Authorization: `Bearer ${token}` } }
         );
         const data = await response.json();
 
@@ -115,10 +115,10 @@ function TripDetails() {
       };
 
       const res = await fetch(
-        `https://lampstackprojectgroup9.com/api/edit-trip/${userId}/${tripId}`,
+        `https://lampstackprojectgroup9.com/api/edit-trip/${tripId}`,
         {
           method: "PUT",
-          headers: { "Content-Type": "application/json" },
+          headers: { "Content-Type": "application/json" , Authorization: `Bearer ${token}` },
           body: JSON.stringify(payload),
         }
       );
@@ -143,8 +143,9 @@ function TripDetails() {
       if (!tripId) return;
 
       try {
-        await fetch(`https://lampstackprojectgroup9.com/api/delete-trip/${userId}/${tripId}`, {
+        await fetch(`https://lampstackprojectgroup9.com/api/delete-trip/${tripId}`, {
           method: "DELETE",
+          headers:{ Authorization: `Bearer ${token}` },
         });
         setShowTripModal(false);
         navigate("/trips"); // go back to trips page after deletion
