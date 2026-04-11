@@ -147,8 +147,8 @@ function TripFlight({ tripId }: TripFlightProps) {
           <div key={i} className="trip-card" onClick={() => handleEditClick(i)}>
             <h3>{f.airline}</h3>
             <p>{f.flightNumber}</p>
-            <p>Departure: {new Date(f.departure).toLocaleString({hour: numeric, minute: 2-digit})}</p>
-            <p>Arrival: {f.arrival ? new Date(f.arrival).toLocaleString({hour: numeric, minute: 2-digit}) : "-"}</p>
+            <p>Departure: {new Date(f.departure).toLocaleString({hour: 'numeric', minute: '2-digit'})}</p>
+            <p>Arrival: {f.arrival ? new Date(f.arrival).toLocaleString({hour: 'numeric', minute: '2-digit'}) : "-"}</p>
           </div>
         ))}
       </div>
