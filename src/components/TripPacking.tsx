@@ -55,7 +55,6 @@ function TripPacking({ tripId }: TripPackingProps) {
     setItemForm({ ...items[index] });
     //setShowModal(true);
     
-    const div = 
   };
 
   // Check an item.
