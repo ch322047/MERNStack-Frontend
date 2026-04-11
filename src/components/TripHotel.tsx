@@ -143,8 +143,8 @@ function TripHotel({ tripId }: TripHotelProps) {
         {hotels.map((h, i) => (
           <div key={i} className="trip-card" onClick={() => handleEditClick(i)}>
             <h3>{h.name}</h3>
-            <p>Check-In: {h.checkIn ? new Date(h.checkIn).toLocaleString() : "-"}</p>
-            <p>Check-Out: {h.checkOut ? new Date(h.checkOut).toLocaleString() : "-"}</p>
+            <p>Check-In: {h.checkIn ? new Date(h.checkIn).toLocaleString(undefined, {hour: 'numeric', minute: '2-digit'}) : "-"}</p>
+            <p>Check-Out: {h.checkOut ? new Date(h.checkOut).toLocaleString(undefined, {hour: 'numeric', minute: '2-digit'}) : "-"}</p>
             <p>Booked: {h.booked ? "Yes" : "No"}</p>
           </div>
         ))}
