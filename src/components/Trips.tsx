@@ -9,7 +9,7 @@ function Trips() {
   const stored = localStorage.getItem('user_data');
   const user = stored ? JSON.parse(stored) : null;
   const userId = user?.id;
-  const token = localStorage.getItem('token');
+  const token = JSON.parse(localStorage.getItem('token'));
 
   const [message, setMessage] = useState('');
   const [search, setSearchValue] = useState('');
@@ -25,7 +25,7 @@ function Trips() {
 
   // Redirect to login if not logged in
   useEffect(() => {
-    if (!userId) {
+    if (!userId || !token) {
       navigate('/login');
     }
   }, [userId, navigate]);
