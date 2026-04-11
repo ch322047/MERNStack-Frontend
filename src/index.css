@@ -326,6 +326,26 @@ button[type="submit"]:hover {
   box-shadow: 0 6px 12px rgba(0,0,0,0.25);
 }
 
+.add-item-btn {
+  padding: 15px 25px; /* a bit bigger than confirm-btn */
+  margin-top: 20px; /* match padding of details-body */
+  font-size: 1.2rem;
+  font-weight: bold;
+  background-color: #00cfff; /* match confirm-btn color */
+  color: rgb(0, 0, 0);
+  border: none;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  cursor: pointer;
+  z-index: 1000;
+  transition: transform 0.1s ease, box-shadow 0.2s ease;
+}
+
+.add-item-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0,0,0,0.25);
+}
+
 .delete-day-btn {
   position: fixed;
   bottom: 30px;
