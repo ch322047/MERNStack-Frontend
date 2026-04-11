@@ -48,13 +48,14 @@ function TripPacking({ tripId }: TripPackingProps) {
     setItemForm({ item: "", packed: false });
     setShowModal(true);
   };
-  /*
+  
   // Open modal for editing
   const handleEditClick = (index: number) => {
     setEditingIndex(index);
     setItemForm({ ...items[index] });
-    setShowModal(true);
-  };*/
+    //setShowModal(true);
+    
+  };
 
   // Check an item.
   const handleCheckItem = async (index: number, checked: boolean) => {
@@ -126,18 +127,26 @@ function TripPacking({ tripId }: TripPackingProps) {
       setMessage("Failed to delete item");
     }
   };
-  /*onClick={() => handleEditClick(idx)*/
+
   return (
     <div className="trip-page">
       <div className="trip-list">
         {items.map((i, idx) => (
-          <div key={idx} className="trip-entry">
+          <div key={idx} className="trip-entry" onClick={() => handleEditClick(idx)}>
             <input
               type="checkbox"
               checked={items[idx].packed}
               onChange={(e) => handleCheckItem(idx, e.target.checked)}
             />
             <p>{i.item}</p>
+            <input
+              placeholder="Item"
+              value={items[idx].item}
+              onChange={(e) => setItemForm({ ...itemForm, item: e.target.value })}
+            />
+            <button className="delete-btn" onClick={() => deleteItem(idx)}>
+              DELETE
+            </button>
           </div>
         ))}
         <button className="add-item-btn" onClick={handleAddClick}>
