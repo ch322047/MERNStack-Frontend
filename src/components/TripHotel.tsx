@@ -13,9 +13,9 @@ interface Hotel {
 }
 
 function TripHotel({ tripId }: TripHotelProps) {
-  const stored = localStorage.getItem("user_data");
-  const ud = stored && stored !== "undefined" ? JSON.parse(stored) : { id: -1 };
-  const userId: string = ud.id;
+  //const stored = localStorage.getItem("user_data");
+  //const ud = stored && stored !== "undefined" ? JSON.parse(stored) : { id: -1 };
+  //const userId: string = ud.id;
   const token = localStorage.getItem('token');
 
   const [hotels, setHotels] = useState<Hotel[]>([]);
