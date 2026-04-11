@@ -114,7 +114,7 @@ function TripPacking({ tripId }: TripPackingProps) {
           <div key={idx} className="trip-entry">
             <input
               type="checkbox"
-              checked={itemForm.packed}
+              checked={items[idx].packed}
               onChange={() => handleCheckItem(idx)}
             />
             <p>{i.item}</p>
