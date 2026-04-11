@@ -104,7 +104,7 @@ function TripPacking({ tripId }: TripPackingProps) {
     <div className="trip-page">
       <div className="trip-grid">
         {items.map((i, idx) => (
-          <div key={idx} className="trip-card" onClick={() => handleEditClick(idx)}>
+          <div key={idx} className="trip-entry" onClick={() => handleEditClick(idx)}>
             <p>{i.item}</p>
             <p>Packed: {i.packed ? "Yes" : "No"}</p>
           </div>
