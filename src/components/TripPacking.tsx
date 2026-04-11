@@ -84,6 +84,31 @@ function TripPacking({ tripId }: TripPackingProps) {
     }
   };
 
+  // Change an item's name
+  const handleCheckItem = async (index: number, name: string) => {
+    setEditingIndex(index);
+    setItemForm({ ...items[index] });
+
+    // update item in array
+    items[index].item = name;
+    
+    // save changes
+    try {
+      const url = buildPath(`edit-packing-list/${tripId}/${items[index]._id}`);
+
+      await fetch(url, {
+        method: "PUT",
+        body: JSON.stringify(items[index]),
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+      });
+
+      //setEditingIndex(null);
+      fetchItems();
+    } catch (err: any) {
+      setMessage(err instanceof Error ? err.message : String(err));
+    }
+  };
+
   const saveItem = async () => {
     if (!itemForm.item) {
       setMessage("Please enter an item name");
@@ -145,7 +170,7 @@ function TripPacking({ tripId }: TripPackingProps) {
               <input autoFocus
                 placeholder="Item"
                 value={items[idx].item}
-                onChange={(e) => setItemForm({ ...itemForm, item: e.target.value })}
+                onBlur={(e) => setItemForm({ ...itemForm, item: e.target.value })}
               />
             )}
             {editingIndex === idx && (
