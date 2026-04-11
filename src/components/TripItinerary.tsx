@@ -19,9 +19,10 @@ interface TripItineraryProps {
 }
 
 function TripItinerary({ tripId }: TripItineraryProps) {
-  const stored = localStorage.getItem("user_data");
-  const ud = stored && stored !== "undefined" ? JSON.parse(stored) : { id: -1 };
-  const userId: string = ud.id;
+  //const stored = localStorage.getItem("user_data");
+  //const ud = stored && stored !== "undefined" ? JSON.parse(stored) : { id: -1 };
+  //const userId: string = ud.id;
+  const token = localStorage.getItem('token');
 
   const [itinerary, setItinerary] = useState<ItineraryDay[]>([]);
   const [selectedDay, setSelectedDay] = useState<ItineraryDay | null>(null);
@@ -44,7 +45,7 @@ function TripItinerary({ tripId }: TripItineraryProps) {
 
   const fetchTrip = async () => {
     try {
-      const res = await fetch(buildPath(`get-trip/${tripId}`));
+      const res = await fetch(buildPath(`get-trip/${tripId}`),{ headers:{ Authorization: `Bearer ${token}` } });
       const data = await res.json();
 
       if (data.error) setMessage(data.error);
@@ -65,10 +66,10 @@ function TripItinerary({ tripId }: TripItineraryProps) {
     }
 
     try {
-      await fetch(buildPath(`add-itinerary-day/${userId}/${tripId}`), {
+      await fetch(buildPath(`add-itinerary-day/${tripId}`), {
         method: "POST",
         body: JSON.stringify({ date: new Date(dayDate).toISOString() }),
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
       });
 
       setShowDayModal(false);
@@ -84,8 +85,8 @@ function TripItinerary({ tripId }: TripItineraryProps) {
 
     try {
       await fetch(
-        buildPath(`delete-itinerary/${userId}/${tripId}/${dayId}`),
-        { method: "DELETE" }
+        buildPath(`delete-itinerary/${tripId}/${dayId}`),
+        { method: "DELETE", headers:{ Authorization: `Bearer ${token}` } }
       );
 
       setSelectedDay(null);
@@ -140,10 +141,10 @@ function TripItinerary({ tripId }: TripItineraryProps) {
     try {
       const url = editingActivity
         ? buildPath(
-            `edit-itinerary-day-activity/${userId}/${tripId}/${selectedDay._id}/${editingActivity._id}`
+            `edit-itinerary-day-activity/${tripId}/${selectedDay._id}/${editingActivity._id}`
           )
         : buildPath(
-            `add-itinerary-day-activity/${userId}/${tripId}/${selectedDay._id}`
+            `add-itinerary-day-activity/${tripId}/${selectedDay._id}`
           );
 
       await fetch(url, {
@@ -165,7 +166,7 @@ function TripItinerary({ tripId }: TripItineraryProps) {
     try {
       await fetch(
         buildPath(
-          `delete-activity/${userId}/${tripId}/${selectedDay._id}/${activityId}`
+          `delete-activity/${tripId}/${selectedDay._id}/${activityId}`
         ),
         { method: "DELETE" }
       );
