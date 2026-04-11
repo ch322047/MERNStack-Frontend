@@ -38,7 +38,7 @@ function TripFlight({ tripId }: TripFlightProps) {
   // Fetch flights from trip
   const fetchFlights = async () => {
       try {
-        const res = await fetch(buildPath(`get-trip/${tripId}`,{ headers:{ Authorization: `Bearer ${token}` } }));
+        const res = await fetch(buildPath(`get-trip/${tripId}`),{ headers:{ Authorization: `Bearer ${token}` } });
         const data = await res.json();
         if (data.error) setMessage(data.error);
         else setFlights((data.trip?.flights || []).filter((f: any) => f));
