@@ -85,20 +85,20 @@ function TripPacking({ tripId }: TripPackingProps) {
   };
 
   // Change an item's name
-  const handleRenameItem = async (index: number, name: string) => {
+  const handleRenameItem = async (name: string) => {
     setEditingIndex(index);
-    setItemForm({ ...items[index] });
+    setItemForm({ ...items[editingIndex] });
 
     // update item in array
-    items[index].item = name;
+    items[editingIndex].item = name;
     
     // save changes
     try {
-      const url = buildPath(`edit-packing-list/${tripId}/${items[index]._id}`);
+      const url = buildPath(`edit-packing-list/${tripId}/${items[editingIndex]._id}`);
 
       await fetch(url, {
         method: "PUT",
-        body: JSON.stringify(items[index]),
+        body: JSON.stringify(items[editingIndex]),
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
       });
 
@@ -171,7 +171,7 @@ function TripPacking({ tripId }: TripPackingProps) {
                 <input autoFocus
                   placeholder="Item"
                   value={items[idx].item}
-                  onBlur={(e) => handleRenameItem(idx, e.target.value)}
+                  onBlur={(e) => handleRenameItem(e.target.value)}
                 />
               )}
             </div>
