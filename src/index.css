@@ -216,8 +216,9 @@ button[type="submit"]:hover {
 }
 .trip-entry>div {
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
   text-align: left;
+  width: 100%;
 }
 .trip-entry>div>p {
   width: 100%;
