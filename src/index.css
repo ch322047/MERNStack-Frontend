@@ -326,7 +326,7 @@ button[type="submit"]:hover {
   cursor: pointer;
 }
 .delete-btn:hover {
-  background: #ce5b5b;
+  background: #ce3030;
 }
 
 .add-trip-btn {
