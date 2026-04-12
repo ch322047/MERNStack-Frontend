@@ -163,21 +163,25 @@ function TripPacking({ tripId }: TripPackingProps) {
               checked={items[idx].packed}
               onChange={(e) => handleCheckItem(idx, e.target.checked)}
             />
-            {editingIndex !== idx && (
-              <p>{i.item}</p>
-            )}
-            {editingIndex === idx && (
-              <input autoFocus
-                placeholder="Item"
-                value={items[idx].item}
-                onBlur={(e) => handleRenameItem(idx, e.target.value)}
-              />
-            )}
-            {editingIndex === idx && (
-              <button className="delete-btn" onClick={() => deleteItem(idx)}>
-                DELETE
-              </button>
-            )}
+            <div>
+              {editingIndex !== idx && (
+                <p>{i.item}</p>
+              )}
+              {editingIndex === idx && (
+                <input autoFocus
+                  placeholder="Item"
+                  value={items[idx].item}
+                  onBlur={(e) => handleRenameItem(idx, e.target.value)}
+                />
+              )}
+            </div>
+            <div>
+              {editingIndex === idx && (
+                <button className="delete-btn" onClick={() => deleteItem(idx)}>
+                  DELETE
+                </button>
+              )}
+            </div>
           </div>
         ))}
         <button className="add-item-btn" onClick={handleAddClick}>
