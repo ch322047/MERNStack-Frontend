@@ -157,7 +157,7 @@ function TripPacking({ tripId }: TripPackingProps) {
     <div className="trip-page">
       <div className="trip-list" id="itemsListDiv">
         {items.map((i, idx) => (
-          <div key={idx} className="trip-entry"}>
+          <div key={idx} className="trip-entry">
             <input
               type="checkbox"
               checked={items[idx].packed}
@@ -165,7 +165,7 @@ function TripPacking({ tripId }: TripPackingProps) {
             />
             <div>
               {editingIndex !== idx && (
-                <p onClick={() => handleEditClick(idx)>{i.item}</p>
+                <p onClick={() => handleEditClick(idx)}>{i.item}</p>
               )}
               {editingIndex === idx && (
                 <input autoFocus
