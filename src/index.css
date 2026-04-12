@@ -213,6 +213,10 @@ button[type="submit"]:hover {
 .trip-entry:nth-child(even) {
   background: rgba(54, 69, 113, 0.85);
 }
+.trip-entry>div {
+  display: flex;
+  justify-content: space-between;
+}
 
 /* Checkboxes on entries */
 .trip-entry>input[type="checkbox"] {
