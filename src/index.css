@@ -86,6 +86,7 @@ input {
   background-color: #1a1a1a;
   color: white;
   font-family: inherit;
+  font-size: 1em;
   transition: border 0.2s ease;
 }
 
@@ -216,6 +217,15 @@ button[type="submit"]:hover {
 .trip-entry>div {
   display: flex;
   justify-content: space-between;
+  text-align: left;
+}
+.trip-entry>div>p {
+  width: 100%;
+  margin: 0.6em 0 0.6em 1vw;
+}
+.trip-entry>div>input {
+  width: 100%;
+  margin: 0 0 0 1vw;
 }
 
 /* Checkboxes on entries */
