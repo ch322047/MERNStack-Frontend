@@ -51,28 +51,6 @@ function Auth() {
     }
   }
 
-  async function forgotPass() {
-    setMessage('');
-    
-    try {
-      const response = await fetch(buildPath('forgot-password'), {
-        method: 'POST',
-        body: JSON.stringify({ login: loginName, email: email }),
-        headers: { 'Content-Type': 'application/json' },
-      });
-
-      const res = await response.json();
-    
-      if (res.error) {
-        setMessage(res.error);
-      } else {
-        
-      }  
-    } catch (err: any) {
-      setMessage(err.toString());
-    }
-    
-  }
 
   async function verifyLoginCode(e: React.FormEvent) {
     e.preventDefault();
@@ -218,7 +196,7 @@ function Auth() {
                 />
 
                 <button type="submit">Login</button>
-                <button className="loginHelpBtn" onClick={forgotPass}>Forgot Password</button>
+                <button className="loginHelpBtn" onClick={navigate('/forgot-password')}>Forgot Password</button>
               </form>
             ) : (
               <form onSubmit={verifyLoginCode}>
