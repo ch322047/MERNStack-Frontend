@@ -228,6 +228,11 @@ button[type="submit"]:hover {
   width: 100%;
   margin: 0 0 0 1vw;
 }
+/* container for buttons on each entry */
+.entry-buttons {
+  width:30%;
+  justify-content: right;
+}
 
 /* Checkboxes on entries */
 .trip-entry>input[type="checkbox"] {
