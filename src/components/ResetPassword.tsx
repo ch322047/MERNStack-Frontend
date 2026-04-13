@@ -86,7 +86,7 @@ function ResetPassword() {
         </form>
         
 
-        <p className="message">{message}</p>
+        <p className="message messageOrange">{message}</p>
       </div>
     </div>
   );
