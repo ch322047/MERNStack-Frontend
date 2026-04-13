@@ -215,7 +215,7 @@ function Trips() {
         </div>
       )}
 
-      <p className="message messageOrange">{message}</p>
+      {message && <p className="message">{message}</p>}
     </div>
   );
 }
