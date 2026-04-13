@@ -202,7 +202,7 @@ function TripPacking({ tripId }: TripPackingProps) {
                 />
               )}
             </div>
-            <div>
+            <div className="entry-buttons">
               {editingIndex === idx && (
                 <button className="delete-btn" onClick={() => deleteItem(idx)}>
                   DELETE
