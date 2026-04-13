@@ -26,7 +26,14 @@ export default function VerifyEmailPage() {
       });
   }, []);
 
-  if (status === "loading") return (<p>Verifying your email...</p>);
-  if (status === "success") return (<p>Email verified successfully. You can now log in.</p>);
-  return (<p>Invalid or expired verification link.</p>);
+  return (
+    <div id="loggedInDiv">
+      {status === "loading" && (<p>Verifying your email...</p>)}
+      {status === "success" && (<p>Email verified successfully. You can now log in.</p>)}
+      {status !== "success" && status !== "loading" && (<p>Invalid or expired verification link.</p>)}
+    </div>
+  );
+  //if (status === "loading") return (<p>Verifying your email...</p>);
+  //if (status === "success") return (<p>Email verified successfully. You can now log in.</p>);
+  //return (<p>Invalid or expired verification link.</p>);
 }
