@@ -53,7 +53,7 @@ function TripPacking({ tripId }: TripPackingProps) {
   // Open modal for editing
   const handleEditClick = (index: number) => {
     setEditingIndex(index);
-    setItemForm({ ...items[index] });
+    //setItemForm({ ...items[index] });
     //setShowModal(true);
     
   };
@@ -61,7 +61,7 @@ function TripPacking({ tripId }: TripPackingProps) {
   // Check an item.
   const handleCheckItem = async (index: number, checked: boolean) => {
     setEditingIndex(index);
-    setItemForm({ ...items[index] });
+    //setItemForm({ ...items[index] });
     //setShowModal(false);
 
     // update item in array
