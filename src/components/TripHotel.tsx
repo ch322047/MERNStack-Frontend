@@ -220,7 +220,7 @@ function TripHotel({ tripId }: TripHotelProps) {
         </div>
       )}
 
-      <p className="message">{message}</p>
+      {message && <p className="message">{message}</p>}
     </div>
   );
 }
