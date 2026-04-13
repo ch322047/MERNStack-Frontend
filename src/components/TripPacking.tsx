@@ -170,7 +170,7 @@ function TripPacking({ tripId }: TripPackingProps) {
               {editingIndex === idx && (
                 <input autoFocus
                   placeholder="Item"
-                  value={items[idx].item}
+                  defaultValue={items[idx].item}
                   onBlur={(e) => handleRenameItem(idx, e.target.value)}
                 />
               )}
