@@ -172,6 +172,7 @@ function TripPacking({ tripId }: TripPackingProps) {
         headers:{ Authorization: `Bearer ${token}` },
       });
       setShowModal(false);
+      setEditingIndex(null);
       fetchItems();
     } catch (err: any) {
       console.error(err);
