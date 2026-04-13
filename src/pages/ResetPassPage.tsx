@@ -6,6 +6,7 @@ const ResetPassPage = () =>
     return(
         <div>
             <PageTitle />
+            <p>RESET PASSWORD PAGE</p>
         </div>
     );
 }
