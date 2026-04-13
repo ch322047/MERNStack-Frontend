@@ -16,7 +16,7 @@ function App() {
         <Route path="/" element={<LoginPage/>}/>
         <Route path="/trips" element={<TripPage/>}/>
         <Route path="/trip/:tripId" element={<TripDetailsPage/>}/>
-        <Route path="/api/reset-password" element={<ResetPassPage/>}/>
+        <Route path="/reset-password" element={<ResetPassPage/>}/>
         <Route path="/verify-email" element={<VerifyEmailPage/>}/>
         <Route path="*" element={<Navigate to="/" replace />}/>
       </Routes>  
