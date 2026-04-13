@@ -12,7 +12,7 @@ function ResetPassword() {
   const [newPassword, setNewPassword] = useState('');
 
   // Confirm
-  //const [confirmNewPassword, setConfirmNewPassword] = useState('');
+  const [confirmNewPassword, setConfirmNewPassword] = useState('');
 
   // Token
   const token = localStorage.getItem('token');
@@ -25,11 +25,17 @@ function ResetPassword() {
     e.preventDefault();
     setMessage('');
 
+    // compare 2 passwords
+    if (confirmNewPassword !== newPassword) {
+      setMessage('Passwords do not match');
+      return;
+    }
+    
     try {
-      const response = await fetch(buildPath(`reset-password?token=${token}`), {
+      const response = await fetch(buildPath(`reset-password`), {
         method: 'POST',
         body: JSON.stringify({ token: token, newPassword: newPassword }),
-        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}`,  },
+        headers: { 'Content-Type': 'application/json' },
       });
 
       const res = await response.json();
@@ -116,7 +122,7 @@ function ResetPassword() {
           <input
             type="password"
             placeholder="Confirm New Password"
-            onChange={(e) => setNewPassword(e.target.value)}
+            onChange={(e) => setConfirmNewPassword(e.target.value)}
           />
 
           <button type="submit">Reset</button>
