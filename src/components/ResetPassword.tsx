@@ -8,11 +8,11 @@ function ResetPassword() {
   // Messages to user
   const [message, setMessage] = useState('');
 
-  // Login
-  const [loginPassword, setLoginPassword] = useState('');
-
-  // Register
+  // New Password
   const [newPassword, setNewPassword] = useState('');
+
+  // Confirm
+  const [confirmNewPassword, setConfirmNewPassword] = useState('');
 
   // Token
   const token = localStorage.getItem('token');
@@ -26,7 +26,7 @@ function ResetPassword() {
     setMessage('');
 
     try {
-      const response = await fetch(buildPath('reset-password'), {
+      const response = await fetch(`/api/reset-password?token=${token}`), {
         method: 'POST',
         body: JSON.stringify({ token: token, newPassword: newPassword }),
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}`,  },
@@ -108,15 +108,14 @@ function ResetPassword() {
         <form onSubmit={reset}>
           <input
             type="password"
-            placeholder="Old Password"
-            value={loginPassword}
-            onChange={(e) => setLoginPassword(e.target.value)}
+            placeholder="New Password"
+            value={newPassword}
+            onChange={(e) => setNewPassword(e.target.value)}
           />
 
           <input
             type="password"
-            placeholder="New Password"
-            value={newPassword}
+            placeholder="Confirm New Password"
             onChange={(e) => setNewPassword(e.target.value)}
           />
 
