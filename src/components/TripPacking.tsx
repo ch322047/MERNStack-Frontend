@@ -42,12 +42,13 @@ function TripPacking({ tripId }: TripPackingProps) {
     fetchItems();
   }, [tripId]);
 
+  /*
   // Open modal for new item
   const handleAddClick = () => {
     setEditingIndex(null);
     setItemForm({ item: "", packed: false });
     setShowModal(true);
-  };
+  };*/
   
   // Open modal for editing
   const handleEditClick = (index: number) => {
@@ -136,6 +137,34 @@ function TripPacking({ tripId }: TripPackingProps) {
     }
   };
 
+  
+  const addItem = async () => {
+    
+    setItemForm({ item: "", packed: false });
+    
+    const payload = { ...itemForm };
+
+    try {
+      const url =
+        editingIndex === null
+          ? buildPath(`add-to-packing-list/${tripId}`)
+          : buildPath(`edit-packing-list/${tripId}/${items[editingIndex]._id}`);
+
+      await fetch(url, {
+        method: "POST",
+        body: JSON.stringify(payload),
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+      });
+
+      setEditingIndex(null);
+      //setShowModal(false);
+      fetchItems(items.length);
+    } catch (err: any) {
+      setMessage(err instanceof Error ? err.message : String(err));
+    }
+  };
+
+  
   const deleteItem = async (index: number) => {
     const itemId = items[index]._id;
     if (!itemId) return;
@@ -184,7 +213,7 @@ function TripPacking({ tripId }: TripPackingProps) {
             </div>
           </div>
         ))}
-        <button className="add-item-btn" onClick={handleAddClick}>
+        <button className="add-item-btn" onClick={addItem}>
           + Add Item
         </button>
       </div>
