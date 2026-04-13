@@ -145,10 +145,7 @@ function TripPacking({ tripId }: TripPackingProps) {
     const payload = { ...itemForm };
 
     try {
-      const url =
-        editingIndex === null
-          ? buildPath(`add-to-packing-list/${tripId}`)
-          : buildPath(`edit-packing-list/${tripId}/${items[editingIndex]._id}`);
+      const url = buildPath(`add-to-packing-list/${tripId}`);
 
       await fetch(url, {
         method: "POST",
