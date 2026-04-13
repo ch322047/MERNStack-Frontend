@@ -5,7 +5,7 @@ import './App.css';
 import LoginPage from './pages/LoginPage';
 import TripPage from './pages/TripPage';
 import TripDetailsPage from './pages/TripDetailsPage';
-import resetPassPage from './pages/resetPassPage';
+import ResetPassPage from './pages/ResetPassPage';
 
 
 function App() {
@@ -15,7 +15,7 @@ function App() {
         <Route path="/" element={<LoginPage/>}/>
         <Route path="/trips" element={<TripPage/>}/>
         <Route path="/trip/:tripId" element={<TripDetailsPage/>}/>
-        <Route path="/api/reset-password" element={<resetPassPage/>}/>
+        <Route path="/api/reset-password" element={<ResetPassPage/>}/>
         <Route path="*" element={<Navigate to="/" replace />}/>
       </Routes>  
     </Router>
