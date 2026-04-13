@@ -428,6 +428,7 @@ button[type="submit"]:hover {
 .message {
   text-align: center;
   margin-top: 20px;
+  text-shadow: -2px -2px 0 #000,2px -2px 0 #000,-2px 2px 0 #000,2px 2px 0 #000;
 }
 
 
