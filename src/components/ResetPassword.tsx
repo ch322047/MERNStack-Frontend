@@ -37,9 +37,8 @@ function ResetPassword() {
       if (res.error) {
         setMessage(res.error);
       } else {
-        // Login code sent successfully
-        setMessage('Login code sent to your email. Enter it above to continue.');
-        setShowCodeInput(true);
+        // Password reset successfully
+        setMessage('Password reset!');
       }
     } catch (err: any) {
       setMessage(err.toString());
