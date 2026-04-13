@@ -114,6 +114,25 @@ button[type="submit"]:hover {
   box-shadow: 0 4px 12px rgba(0, 150, 255, 0.3);
 }
 
+.loginHelpBtn {
+  margin: 1rem auto 0 auto;
+  width: 70%;
+  padding: 0.50em 1em;
+  border-radius: 999px;
+  background-color: darkgray;
+  color: white;
+  font-weight: 600;
+  font-size: 1.05rem;
+  display: block;
+  transition: all 0.25s ease;
+}
+
+.loginHelpBtn:hover {
+  background-color: gray;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(255, 70, 0, 0.3);
+}
+
 /* trips page */
 /* PAGE BACKGROUND */
 .trips-page {
