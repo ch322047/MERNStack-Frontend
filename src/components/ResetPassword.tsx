@@ -5,13 +5,17 @@ import '../index.css';
 function ResetPassword() {
   const navigate = useNavigate();
 
+  // Messages to user
   const [message, setMessage] = useState('');
 
   // Login
   const [loginPassword, setLoginPassword] = useState('');
 
   // Register
-  //const [newPassword, setNewPassword] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+
+  // Token
+  const token = localStorage.getItem('token');
 
   function buildPath(route: string) {
     return `https://lampstackprojectgroup9.com/api/${route}`;
@@ -24,8 +28,8 @@ function ResetPassword() {
     try {
       const response = await fetch(buildPath('reset-password'), {
         method: 'POST',
-        body: JSON.stringify({ login: loginName, password: loginPassword }),
-        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ token: token, newPassword: newPassword }),
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}`,  },
       });
 
       const res = await response.json();
