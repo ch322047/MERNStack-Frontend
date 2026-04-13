@@ -61,7 +61,7 @@ function ResetPassword() {
           className="back-btn"
           onClick={() => navigate('/trips')}
         >
-          Back
+          ← Back
         </button>
         
         <h1>Reset Password</h1>
