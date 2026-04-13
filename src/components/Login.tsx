@@ -63,6 +63,15 @@ function Auth() {
     } catch (err: any) {
       setMessage(err.toString());
     }
+
+    const res = await response.json();
+    
+    if (res.error) {
+      setMessage(res.error);
+    } else {
+      
+    }
+    
   }
 
   async function verifyLoginCode(e: React.FormEvent) {
