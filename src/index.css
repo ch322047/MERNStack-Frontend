@@ -214,6 +214,11 @@ button[type="submit"]:hover {
 .trip-entry:nth-child(even) {
   background: rgba(54, 69, 113, 0.85);
 }
+/* container for buttons on each entry */
+.entry-buttons {
+  width:30%;
+  justify-content: right;
+}
 .trip-entry>div {
   display: flex;
   justify-content: space-around;
@@ -227,11 +232,6 @@ button[type="submit"]:hover {
 .trip-entry>div>input {
   width: 100%;
   margin: 0 0 0 1vw;
-}
-/* container for buttons on each entry */
-.entry-buttons {
-  width:30%;
-  justify-content: right;
 }
 
 /* Checkboxes on entries */
