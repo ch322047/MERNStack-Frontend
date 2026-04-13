@@ -348,7 +348,7 @@ function TripItinerary({ tripId }: TripItineraryProps) {
         </>
       )}
 
-      <p className="message">{message}</p>
+      {message !== "" && (<p className="message">{message}</p>)}
     </div>
   );
 }
