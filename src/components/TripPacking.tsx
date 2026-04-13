@@ -153,9 +153,8 @@ function TripPacking({ tripId }: TripPackingProps) {
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
       });
 
-      setEditingIndex(items.length);
-      //setShowModal(false);
       fetchItems();
+      setEditingIndex(items.length);
     } catch (err: any) {
       setMessage(err instanceof Error ? err.message : String(err));
     }
