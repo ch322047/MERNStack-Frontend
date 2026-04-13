@@ -82,6 +82,7 @@ function TripHotel({ tripId }: TripHotelProps) {
   // Save hotel (add or edit)
   const saveHotel = async () => {
     if (!hotelForm.name || !hotelForm.checkIn) {
+      setShowModal(false);
       setMessage("Please fill Hotel Name and Check-In Time");
       return;
     }
@@ -111,6 +112,7 @@ function TripHotel({ tripId }: TripHotelProps) {
       setShowModal(false);
       fetchHotels();
     } catch (err: any) {
+      setShowModal(false);
       setMessage(err instanceof Error ? err.message : String(err));
     }
   };
@@ -128,6 +130,7 @@ function TripHotel({ tripId }: TripHotelProps) {
       fetchHotels();
     } catch (err: any) {
       console.error(err);
+      setShowModal(false);
       setMessage("Failed to delete hotel.");
     }
   };

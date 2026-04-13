@@ -84,6 +84,7 @@ function TripFlight({ tripId }: TripFlightProps) {
 
   const saveFlight = async () => {
     if (!flightForm.airline || !flightForm.flightNumber || !flightForm.departure) {
+      setShowModal(false);
       setMessage("Please fill Airline, Flight Number, and Departure Time");
       return;
     }
@@ -113,6 +114,7 @@ function TripFlight({ tripId }: TripFlightProps) {
       setShowModal(false); 
       fetchFlights();
     } catch (err: any) {
+      setShowModal(false);
       setMessage(err instanceof Error ? err.message : String(err));
     }
   };
@@ -131,6 +133,7 @@ function TripFlight({ tripId }: TripFlightProps) {
       fetchFlights(); //refresh flight list
     } catch (err: any) {
       console.error(err);
+      setShowModal(false);
       setMessage("Failed to delete flight.");
     }
   };

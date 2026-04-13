@@ -58,15 +58,26 @@ function TripItinerary({ tripId }: TripItineraryProps) {
 
   const saveDay = async () => {
     if (!dayDate) {
+      setShowDayModal(false);
       setMessage("Please select a date.");
       return;
     }
+
+    const [year, month, day] = dayDate.split("-");
+    const localDate = new Date(
+      Number(year),
+      Number(month) - 1,
+      Number(day),
+      12, // noon avoids timezone shifting issues
+      0,
+      0
+    );
 
     try {
       await fetch(buildPath(`add-itinerary-day/${tripId}`), {
         method: "POST",
         body: JSON.stringify({ 
-          date: new Date(dayDate).toISOString() 
+          date: localDate.toISOString()
         }),
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
       });
@@ -75,6 +86,7 @@ function TripItinerary({ tripId }: TripItineraryProps) {
       setDayDate("");
       fetchTrip();
     } catch {
+      setShowDayModal(false);
       setMessage("Failed to add day.");
     }
   };
@@ -91,6 +103,7 @@ function TripItinerary({ tripId }: TripItineraryProps) {
       setSelectedDay(null);
       fetchTrip();
     } catch {
+      setShowDayModal(false);
       setMessage("Failed to delete day.");
     }
   };
@@ -123,6 +136,7 @@ function TripItinerary({ tripId }: TripItineraryProps) {
     if (!selectedDay?._id) return;
 
     if (!activityForm.name || !activityForm.time) {
+      setShowActivityModal(false);
       setMessage("Name and time are required.");
       return;
     }
@@ -155,6 +169,7 @@ function TripItinerary({ tripId }: TripItineraryProps) {
       setShowActivityModal(false);
       fetchTrip();
     } catch {
+      setShowActivityModal(false);
       setMessage("Failed to save activity.");
     }
   };
@@ -173,6 +188,7 @@ function TripItinerary({ tripId }: TripItineraryProps) {
       setShowActivityModal(false);
       fetchTrip();
     } catch {
+      setShowActivityModal(false);
       setMessage("Failed to delete activity.");
     }
   };
