@@ -83,7 +83,7 @@ function TripPacking({ tripId }: TripPackingProps) {
       setMessage(err instanceof Error ? err.message : String(err));
     }
   };
-  /*
+  
   // Change an item's name
   const handleRenameItem = async (index: number, name: string) => {
     //setEditingIndex(index);
@@ -107,7 +107,7 @@ function TripPacking({ tripId }: TripPackingProps) {
     } catch (err: any) {
       setMessage(err instanceof Error ? err.message : String(err));
     }
-  };*/
+  };
 
   const saveItem = async () => {
     if (!itemForm.item) {
@@ -168,10 +168,10 @@ function TripPacking({ tripId }: TripPackingProps) {
                 <p>{i.item}</p>
               )}
               {editingIndex === idx && (
-                <input autoFocus
+                <input
                   placeholder="Item"
                   value={items[idx].item}
-                  
+                  onBlur={(e) => handleRenameItem(idx, e.target.value)}
                 />
               )}
             </div>
