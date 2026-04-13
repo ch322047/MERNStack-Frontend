@@ -163,7 +163,7 @@ function TripItinerary({ tripId }: TripItineraryProps) {
       await fetch(url, {
         method: editingActivity ? "PUT" : "POST",
         body: JSON.stringify(payload),
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
       });
 
       setShowActivityModal(false);
@@ -182,7 +182,9 @@ function TripItinerary({ tripId }: TripItineraryProps) {
         buildPath(
           `delete-activity/${tripId}/${selectedDay._id}/${activityId}`
         ),
-        { method: "DELETE" }
+        { method: "DELETE",
+          headers: {Authorization: `Bearer ${token}`}
+        }
       );
 
       setShowActivityModal(false);
