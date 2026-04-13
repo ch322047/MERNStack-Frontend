@@ -130,6 +130,14 @@ button[type="submit"]:hover {
   font-weight: 500;
 }
 
+#loggedInDiv {
+  background: #0a1428f2;
+  padding: 20px;
+  justify-self: center;
+  border-radius: 16px;
+  box-shadow: 0 0 15px #0096ff26;
+}
+
 /* GRID */
 .trip-grid {
   display: grid;
