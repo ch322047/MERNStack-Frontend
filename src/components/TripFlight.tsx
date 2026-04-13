@@ -217,7 +217,7 @@ function TripFlight({ tripId }: TripFlightProps) {
         </div>
       )}
 
-      <p className="message">{message}</p>
+      {message && <p className="message">{message}</p>}
     </div>
   );
 }
