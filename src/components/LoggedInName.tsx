@@ -1,3 +1,5 @@
+import { useNavigate } from 'react-router-dom';
+
 function LoggedInName()
 {
     function getCurrentUserName() {
@@ -13,7 +15,7 @@ function LoggedInName()
     };    
 	function changePassword() : void
 	{
-		
+		navigate(`/reset-password`);
 	};
 
     return(
