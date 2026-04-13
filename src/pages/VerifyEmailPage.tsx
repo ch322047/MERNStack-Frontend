@@ -1,4 +1,4 @@
-//import PageTitle from '../components/PageTitle';
+import PageTitle from '../components/PageTitle';
 import { useState, useEffect } from "react";
 
 export default function VerifyEmailPage() {
@@ -27,10 +27,13 @@ export default function VerifyEmailPage() {
   }, []);
 
   return (
-    <div id="loggedInDiv">
-      {status === "loading" && (<p>Verifying your email...</p>)}
-      {status === "success" && (<p>Email verified successfully. You can now log in.</p>)}
-      {status !== "success" && status !== "loading" && (<p>Invalid or expired verification link.</p>)}
+    <div>
+      <PageTitle />
+      <div id="loggedInDiv">
+        {status === "loading" && (<p>Verifying your email...</p>)}
+        {status === "success" && (<p>Email verified successfully. You can now log in.</p>)}
+        {status !== "success" && status !== "loading" && (<p>Invalid or expired verification link.</p>)}
+      </div>
     </div>
   );
   //if (status === "loading") return (<p>Verifying your email...</p>);
