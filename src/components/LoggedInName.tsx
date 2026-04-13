@@ -2,6 +2,8 @@ import { useNavigate } from 'react-router-dom';
 
 function LoggedInName()
 {
+	const navigate = useNavigate();
+	
     function getCurrentUserName() {
         var data;
         data = JSON.parse(localStorage.getItem('user_data') || '');
@@ -15,7 +17,7 @@ function LoggedInName()
     };    
 	function changePassword() : void
 	{
-		useNavigate(`/reset-password`);
+		navigate('/reset-password');
 	};
 
     return(
