@@ -18,9 +18,6 @@ function TripPacking({ tripId }: TripPackingProps) {
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
   const [itemForm, setItemForm] = useState<PackingItem>({ item: "", packed: false });
 
-  //const stored = localStorage.getItem("user_data");
-  //const ud = stored && stored !== "undefined" ? JSON.parse(stored) : { id: -1 };
-  //const userId: string = ud.id;
   const token = localStorage.getItem('token');
 
   const buildPath = (route: string) =>

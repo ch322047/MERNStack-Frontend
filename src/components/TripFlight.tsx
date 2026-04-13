@@ -14,9 +14,6 @@ interface Flight {
 }
 
 function TripFlight({ tripId }: TripFlightProps) {
-  const stored = localStorage.getItem("user_data");
-  const ud = stored && stored !== "undefined" ? JSON.parse(stored) : { id: -1 };
-  const userId: string = ud.id;
   const token = localStorage.getItem('token');
 
   const [flights, setFlights] = useState<Flight[]>([]);
@@ -104,8 +101,8 @@ function TripFlight({ tripId }: TripFlightProps) {
     try {
       const url =
         editingIndex === null
-          ? buildPath(`add-flight/${userId}/${tripId}`)
-          : buildPath(`edit-flight/${userId}/${tripId}/${flights[editingIndex]._id}`);
+          ? buildPath(`add-flight/${tripId}`)
+          : buildPath(`edit-flight/${tripId}/${flights[editingIndex]._id}`);
 
       await fetch(url, {
         method: editingIndex === null ? "POST" : "PUT",
@@ -126,7 +123,7 @@ function TripFlight({ tripId }: TripFlightProps) {
     if (!flightId) return;
 
     try {
-      await fetch(buildPath(`delete-flight/${userId}/${tripId}/${flightId}`), {
+      await fetch(buildPath(`delete-flight/${tripId}/${flightId}`), {
         method: "DELETE",
         headers:{ Authorization: `Bearer ${token}`},
       });
@@ -147,8 +144,8 @@ function TripFlight({ tripId }: TripFlightProps) {
           <div key={i} className="trip-card" onClick={() => handleEditClick(i)}>
             <h3>{f.airline}</h3>
             <p>{f.flightNumber}</p>
-            <p>Departure: {new Date(f.departure).toLocaleString(undefined, {hour: 'numeric', minute: '2-digit'})}</p>
-            <p>Arrival: {f.arrival ? new Date(f.arrival).toLocaleString(undefined, {hour: 'numeric', minute: '2-digit'}) : "-"}</p>
+            <p>Departure: {new Date(f.departure).toLocaleString(undefined, {year: 'numeric', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit'})}</p>
+            <p>Arrival: {f.arrival ? new Date(f.arrival).toLocaleString(undefined, {year: 'numeric', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit'}) : "-"}</p>
           </div>
         ))}
       </div>

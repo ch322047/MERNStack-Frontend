@@ -13,9 +13,6 @@ interface Hotel {
 }
 
 function TripHotel({ tripId }: TripHotelProps) {
-  //const stored = localStorage.getItem("user_data");
-  //const ud = stored && stored !== "undefined" ? JSON.parse(stored) : { id: -1 };
-  //const userId: string = ud.id;
   const token = localStorage.getItem('token');
 
   const [hotels, setHotels] = useState<Hotel[]>([]);
@@ -143,8 +140,8 @@ function TripHotel({ tripId }: TripHotelProps) {
         {hotels.map((h, i) => (
           <div key={i} className="trip-card" onClick={() => handleEditClick(i)}>
             <h3>{h.name}</h3>
-            <p>Check-In: {h.checkIn ? new Date(h.checkIn).toLocaleString(undefined, {hour: 'numeric', minute: '2-digit'}) : "-"}</p>
-            <p>Check-Out: {h.checkOut ? new Date(h.checkOut).toLocaleString(undefined, {hour: 'numeric', minute: '2-digit'}) : "-"}</p>
+            <p>Check-In: {h.checkIn ? new Date(h.checkIn).toLocaleString(undefined, {year: 'numeric', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit'}) : "-"}</p>
+            <p>Check-Out: {h.checkOut ? new Date(h.checkOut).toLocaleString(undefined, {year: 'numeric', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit'}) : "-"}</p>
             <p>Booked: {h.booked ? "Yes" : "No"}</p>
           </div>
         ))}

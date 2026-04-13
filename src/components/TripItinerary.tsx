@@ -19,9 +19,6 @@ interface TripItineraryProps {
 }
 
 function TripItinerary({ tripId }: TripItineraryProps) {
-  //const stored = localStorage.getItem("user_data");
-  //const ud = stored && stored !== "undefined" ? JSON.parse(stored) : { id: -1 };
-  //const userId: string = ud.id;
   const token = localStorage.getItem('token');
 
   const [itinerary, setItinerary] = useState<ItineraryDay[]>([]);
@@ -68,7 +65,9 @@ function TripItinerary({ tripId }: TripItineraryProps) {
     try {
       await fetch(buildPath(`add-itinerary-day/${tripId}`), {
         method: "POST",
-        body: JSON.stringify({ date: new Date(dayDate).toISOString() }),
+        body: JSON.stringify({ 
+          date: new Date(dayDate).toISOString() 
+        }),
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
       });
 
@@ -130,7 +129,7 @@ function TripItinerary({ tripId }: TripItineraryProps) {
 
     const [hours, minutes] = activityForm.time.split(":");
     const date = new Date(selectedDay.date);
-    date.setHours(parseInt(hours), parseInt(minutes), 0, 0); // set hours and minutes
+    date.setHours(parseInt(hours), parseInt(minutes), 12, 0); // set hours and minutes
     const isoTime = date.toISOString(); // valid full ISO string for API
 
     const payload = {
