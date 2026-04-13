@@ -218,7 +218,7 @@ function Auth() {
                 />
 
                 <button type="submit">Login</button>
-                <button onClick={forgotPass}>Forgot Password</button>
+                <button className="loginHelpBtn" onClick={forgotPass}>Forgot Password</button>
               </form>
             ) : (
               <form onSubmit={verifyLoginCode}>
@@ -270,7 +270,7 @@ function Auth() {
             />
 
             <button type="submit">Register</button>
-            <button onClick={(e) => resendEmail(e)}>Resend Email</button>
+            <button className="loginHelpBtn" onClick={(e) => resendEmail(e)}>Resend Email</button>
           </form>
       
         )}
