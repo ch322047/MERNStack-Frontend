@@ -431,12 +431,16 @@ button[type="submit"]:hover {
   text-shadow: 0 0 2px #000000;
   justify-self: center;
   font-weight: bold;
-}
-.messageOrange {
   background-color: #b17900e5;
   border-radius: 16px;
   padding: 2px 10px;
 }
+/*
+.messageOrange {
+  background-color: #b17900e5;
+  border-radius: 16px;
+  padding: 2px 10px;
+}*/
 
 
 
