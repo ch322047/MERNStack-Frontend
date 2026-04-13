@@ -1,14 +1,34 @@
 import PageTitle from '../components/PageTitle';
-//import LoggedInName from '../components/LoggedInName';
+import { useState, useEffect } from "react";
 
-const VerifyEmailPage = () =>
-{
-    return(
-        <div>
-            <PageTitle />
-            <p>Your email has been verified! You can now close this tab.</p>
-        </div>
-    );
+export default function VerifyEmailPage() {
+  const [status, setStatus] = useState("loading");
+
+  useEffect(() => {
+    const token = new URLSearchParams(window.location.search).get("token");
+
+    if (!token) {
+      setStatus("error");
+      return;
+    }
+
+    fetch(`/api/verify-email?token=${token}`)
+      .then((res) => res.json())
+      .then((data) => {
+        if (!data.error) {
+          setStatus("success");
+        } else {
+          setStatus("error");
+        }
+      })
+      .catch(() => {
+        setStatus("error");
+      });
+  }, []);
+
+  if (status === "loading") return (<p>Verifying your email...</p>);
+  if (status === "success") return (<p>Email verified successfully. You can now log in.</p>);
+  return (<p>Invalid or expired verification link.</p>);
 }
 
 export default VerifyEmailPage;
