@@ -51,62 +51,19 @@ function ResetPassword() {
     }
   }
 
-  /*
-  async function doRegister(e: React.FormEvent) {
-    e.preventDefault();
-    setMessage('');
-
-    try {
-      const response = await fetch(buildPath('register'), {
-        method: 'POST',
-        body: JSON.stringify({
-          firstName,
-          lastName,
-          login: registerLogin,
-          email,
-          password: registerPassword,
-        }),
-        headers: { 'Content-Type': 'application/json' },
-      });
-
-      let res;
-      try {
-        res = await response.json()
-      } catch (err) {
-        console.error('Failed to parse JSON.');
-        setMessage('Server error: see console');
-        return;
-      }
-
-      if (res.error) {
-        setMessage(res.error);
-      } else {
-        localStorage.setItem('user_data', JSON.stringify(res.user));
-        setMessage('Registration successful! Check your email.');
-
-        
-        
-        //setTimeout(() => setIsLoginTab(true), 2000); // This takes the user back to the login page
-      }
-    } catch (err: any) {
-      setMessage(err.toString());
-    }
-  }*/
-
 
   
   return (
     <div className="auth-container">
       <div className="auth-box">
-        <div className="tabs">
-          <button
-            className="back-btn"
-            onClick={() => navigate('/trips')}
-          >
-            Back
-          </button>
-        </div>
 
+        <button
+          className="back-btn"
+          onClick={() => navigate('/trips')}
+        >
+          Back
+        </button>
+        
         <h1>Reset Password</h1>
 
         
