@@ -43,7 +43,7 @@ function Auth() {
         setMessage(res.error);
       } else {
         // Login code sent successfully
-        setMessage('Login code sent to your email. Enter it below to continue.');
+        setMessage('Login code sent to your email. Enter it above to continue.');
         setShowCodeInput(true);
       }
     } catch (err: any) {
