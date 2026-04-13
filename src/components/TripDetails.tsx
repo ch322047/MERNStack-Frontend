@@ -132,6 +132,7 @@ function TripDetails() {
         setShowTripModal(false);
         // Refresh trip data
         setTrip({ ...trip, ...payload });
+        setMessage("");// clear message
       }
     } catch (err: any) {
       console.error(err);
