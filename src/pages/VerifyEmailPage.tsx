@@ -1,4 +1,4 @@
-import PageTitle from '../components/PageTitle';
+//import PageTitle from '../components/PageTitle';
 import { useState, useEffect } from "react";
 
 export default function VerifyEmailPage() {
@@ -30,5 +30,3 @@ export default function VerifyEmailPage() {
   if (status === "success") return (<p>Email verified successfully. You can now log in.</p>);
   return (<p>Invalid or expired verification link.</p>);
 }
-
-export default VerifyEmailPage;
