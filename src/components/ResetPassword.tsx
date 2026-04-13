@@ -12,7 +12,7 @@ function ResetPassword() {
   const [newPassword, setNewPassword] = useState('');
 
   // Confirm
-  const [confirmNewPassword, setConfirmNewPassword] = useState('');
+  //const [confirmNewPassword, setConfirmNewPassword] = useState('');
 
   // Token
   const token = localStorage.getItem('token');
@@ -26,7 +26,7 @@ function ResetPassword() {
     setMessage('');
 
     try {
-      const response = await fetch(`/api/reset-password?token=${token}`, {
+      const response = await fetch(buildPath(`reset-password?token=${token}`), {
         method: 'POST',
         body: JSON.stringify({ token: token, newPassword: newPassword }),
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}`,  },
