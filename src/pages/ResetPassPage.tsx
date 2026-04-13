@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import PageTitle from '../components/PageTitle';
+import ResetPassword from '../components/ResetPassword';
 import { useNavigate } from 'react-router-dom';
 //import LoggedInName from '../components/LoggedInName';
 
@@ -23,7 +24,7 @@ const ResetPassPage = () =>
     return(
         <div>
             <PageTitle />
-            <p>RESET PASSWORD PAGE</p>
+            <ResetPassword />
         </div>
     );
 }
