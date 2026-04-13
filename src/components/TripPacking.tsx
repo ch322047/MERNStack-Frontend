@@ -88,7 +88,7 @@ function TripPacking({ tripId }: TripPackingProps) {
   // Change an item's name
   const handleRenameItem = async (index: number, name: string) => {
     //setEditingIndex(index);
-    setItemForm({ ...items[index] });
+    //setItemForm({ ...items[index] });
 
     // update item in array
     items[index].item = name;
