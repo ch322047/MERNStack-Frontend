@@ -275,7 +275,7 @@ function Auth() {
       
         )}
 
-        <p className="message">{message}</p>
+        {message && <p className="message">{message}</p>}
       </div>
     </div>
   );
