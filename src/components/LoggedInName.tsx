@@ -15,7 +15,7 @@ function LoggedInName()
     };    
 	function changePassword() : void
 	{
-		navigate(`/reset-password`);
+		useNavigate(`/reset-password`);
 	};
 
     return(
