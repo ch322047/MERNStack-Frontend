@@ -185,7 +185,7 @@ function Auth() {
         {isLoginTab ? (
           <>
             {!showCodeInput ? (
-              <form onSubmit={doLogin}>
+              <form onSubmit={doLogin} navigate={false}>
                 <input
                   type="text"
                   placeholder="Username"
