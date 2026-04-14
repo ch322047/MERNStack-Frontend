@@ -1,9 +1,7 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import '../index.css';
 
 function ResetPassword() {
-  const navigate = useNavigate();
 
   // Messages to user
   const [message, setMessage] = useState('');
