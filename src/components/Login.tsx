@@ -79,7 +79,7 @@ function Auth() {
     }
   }
 
-  async function forgotPassword() {
+  async function forgotPassword(e: React.FormEvent) {
     e.preventDefault();
     setMessage('');
     
@@ -222,7 +222,7 @@ function Auth() {
                     />
     
                     <button type="submit">Login</button>
-                    <button className="loginHelpBtn" onClick={(e) => setForgotPassword(true)}>Forgot Password</button>
+                    <button className="loginHelpBtn" onClick={() => setShowForgot(true)}>Forgot Password</button>
                   </form>
                 ) : (
                   <form onSubmit={verifyLoginCode}>
@@ -253,7 +253,7 @@ function Auth() {
                   />
   
                   <button type="submit">Forgot Password</button>
-                  <button className="loginHelpBtn" onClick={(e) => setForgotPassword(false)}>Login</button>
+                  <button className="loginHelpBtn" onClick={() => setShowForgot(false)}>Login</button>
                 </form>
             )}
           </>
