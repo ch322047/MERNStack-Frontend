@@ -15,7 +15,7 @@ function ResetPassword() {
   const [confirmNewPassword, setConfirmNewPassword] = useState('');
 
   // Token
-  const token = localStorage.getItem('token');
+  const token = new URLSearchParams(window.location.search).get("token");
 
   function buildPath(route: string) {
     return `https://lampstackprojectgroup9.com/api/${route}`;
@@ -56,13 +56,6 @@ function ResetPassword() {
   return (
     <div className="auth-container">
       <div className="auth-box">
-
-        <button
-          className="back-btn"
-          onClick={() => navigate('/trips')}
-        >
-          ← Back
-        </button>
         
         <h1>Reset Password</h1>
 
