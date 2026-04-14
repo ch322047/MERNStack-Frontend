@@ -23,7 +23,7 @@ const ForgotPassPage = () =>
     return(
         <div>
             <PageTitle />
-            <ResetPassword />
+            <ForgotPassword />
         </div>
     );
 }
