@@ -203,37 +203,39 @@ function Auth() {
 
         {isLoginTab ? (
           <>
-            {showForgot ? (
-              {!showCodeInput ? (
-                <form onSubmit={doLogin}>
-                  <input
-                    type="text"
-                    placeholder="Username"
-                    value={loginName}
-                    onChange={(e) => setLoginName(e.target.value)}
-                  />
-  
-                  <input
-                    type="password"
-                    placeholder="Password"
-                    value={loginPassword}
-                    onChange={(e) => setLoginPassword(e.target.value)}
-                  />
-  
-                  <button type="submit">Login</button>
-                  <button className="loginHelpBtn" onClick={(e) => setForgotPassword(true)}>Forgot Password</button>
-                </form>
-              ) : (
-                <form onSubmit={verifyLoginCode}>
-                  <input
-                    type="text"
-                    placeholder="Enter code from email"
-                    value={loginCode}
-                    onChange={(e) => setLoginCode(e.target.value)}
-                  />
-                  <button type="submit">Verify Code</button>
-                </form>
-              )}
+            {!showForgot ? (
+              <>
+                {!showCodeInput ? (
+                  <form onSubmit={doLogin}>
+                    <input
+                      type="text"
+                      placeholder="Username"
+                      value={loginName}
+                      onChange={(e) => setLoginName(e.target.value)}
+                    />
+    
+                    <input
+                      type="password"
+                      placeholder="Password"
+                      value={loginPassword}
+                      onChange={(e) => setLoginPassword(e.target.value)}
+                    />
+    
+                    <button type="submit">Login</button>
+                    <button className="loginHelpBtn" onClick={(e) => setForgotPassword(true)}>Forgot Password</button>
+                  </form>
+                ) : (
+                  <form onSubmit={verifyLoginCode}>
+                    <input
+                      type="text"
+                      placeholder="Enter code from email"
+                      value={loginCode}
+                      onChange={(e) => setLoginCode(e.target.value)}
+                    />
+                    <button type="submit">Verify Code</button>
+                  </form>
+                )}
+              </>
             ) : (
               <form onSubmit={forgotPassword}>
                   <input
