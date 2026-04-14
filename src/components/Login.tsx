@@ -248,7 +248,6 @@ function Auth() {
                   <input
                     type="email"
                     placeholder="Email"
-                    value={email}
                     onChange={(e) => setLoginPassword(e.target.value)}
                   />
   
