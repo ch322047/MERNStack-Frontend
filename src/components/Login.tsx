@@ -78,6 +78,11 @@ function Auth() {
     }
   }
 
+  async function forgotPassword(e: React.FormEvent) {
+    e.preventDefault();
+    navigate('/forgot-password');
+  }
+  
   async function doRegister(e: React.FormEvent) {
     e.preventDefault();
     setMessage('');
@@ -196,7 +201,7 @@ function Auth() {
                 />
 
                 <button type="submit">Login</button>
-                <button className="loginHelpBtn" onClick={() => navigate('/forgot-password')}>Forgot Password</button>
+                <button className="loginHelpBtn" onClick={(e) => forgotPassword(e)}>Forgot Password</button>
               </form>
             ) : (
               <form onSubmit={verifyLoginCode}>
