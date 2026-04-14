@@ -196,7 +196,7 @@ function Auth() {
                 />
 
                 <button type="submit">Login</button>
-                <button className="loginHelpBtn" onClick={navigate('/forgot-password')}>Forgot Password</button>
+                <button className="loginHelpBtn" onClick={() => navigate('/forgot-password')}>Forgot Password</button>
               </form>
             ) : (
               <form onSubmit={verifyLoginCode}>
