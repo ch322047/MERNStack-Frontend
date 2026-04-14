@@ -14,12 +14,6 @@ const ResetPassPage = () =>
     const userId = user?.id;
     const token = localStorage.getItem('token');
 
-    // Redirect to login if not logged in
-    useEffect(() => {
-        if (!userId || !token) {
-            navigate('/login');
-        }
-    }, [userId, navigate]);
     
     return(
         <div>
