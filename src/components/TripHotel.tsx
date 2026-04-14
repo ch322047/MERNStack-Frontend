@@ -125,6 +125,7 @@ function TripHotel({ tripId }: TripHotelProps) {
     try {
       await fetch(buildPath(`delete-hotel/${tripId}/${hotelId}`), {
         method: "DELETE",
+        headers:{ Authorization: `Bearer ${token}`},
       });
       setShowModal(false);
       fetchHotels();
