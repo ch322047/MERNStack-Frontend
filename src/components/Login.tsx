@@ -238,22 +238,22 @@ function Auth() {
               </>
             ) : (
               <form onSubmit={forgotPassword}>
-                  <input
-                    type="text"
-                    placeholder="Username"
-                    value={loginName}
-                    onChange={(e) => setLoginName(e.target.value)}
-                  />
-  
-                  <input
-                    type="email"
-                    placeholder="Email"
-                    onChange={(e) => setLoginPassword(e.target.value)}
-                  />
-  
-                  <button type="submit">Forgot Password</button>
-                  <button className="loginHelpBtn" onClick={() => setShowForgot(false)}>Login</button>
-                </form>
+                <input
+                  type="text"
+                  placeholder="Username"
+                  value={loginName}
+                  onChange={(e) => setLoginName(e.target.value)}
+                />
+
+                <input
+                  type="email"
+                  placeholder="Email"
+                  onChange={(e) => setEmail(e.target.value)}
+                />
+
+                <button type="submit">Forgot Password</button>
+                <button className="loginHelpBtn" onClick={() => setShowForgot(false)}>Login</button>
+              </form>
             )}
           </>
         ) : (
