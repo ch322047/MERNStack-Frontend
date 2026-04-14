@@ -14,6 +14,7 @@ function Auth() {
 
   const [loginCode, setLoginCode] = useState('');
   const [showCodeInput, setShowCodeInput] = useState(false);
+  const [showForgot, setShowForgot] = useState(false);
 
   // Register
   const [firstName, setFirstName] = useState('');
@@ -78,9 +79,27 @@ function Auth() {
     }
   }
 
-  async function forgotPassword(e: React.FormEvent) {
+  async function forgotPassword() {
     e.preventDefault();
-    navigate('/forgot-password');
+    setMessage('');
+    
+    try {
+      const response = await fetch(buildPath(`forgot-password`), {
+        method: 'POST',
+        body: JSON.stringify({ login: loginName, email: email }),
+        headers: { 'Content-Type': 'application/json' },
+      });
+
+      const res = await response.json();
+
+      if (res.error) {
+        setMessage(res.error);
+      } else {
+        setMessage('An email has been sent with a link to reset your password');
+      }
+    } catch (err: any) {
+      setMessage(err.toString());
+    }
   }
   
   async function doRegister(e: React.FormEvent) {
@@ -184,35 +203,56 @@ function Auth() {
 
         {isLoginTab ? (
           <>
-            {!showCodeInput ? (
-              <form onSubmit={doLogin} navigate={false}>
-                <input
-                  type="text"
-                  placeholder="Username"
-                  value={loginName}
-                  onChange={(e) => setLoginName(e.target.value)}
-                />
-
-                <input
-                  type="password"
-                  placeholder="Password"
-                  value={loginPassword}
-                  onChange={(e) => setLoginPassword(e.target.value)}
-                />
-
-                <button type="submit">Login</button>
-                <button className="loginHelpBtn" onClick={(e) => forgotPassword(e)}>Forgot Password</button>
-              </form>
+            {showForgot ? (
+              {!showCodeInput ? (
+                <form onSubmit={doLogin}>
+                  <input
+                    type="text"
+                    placeholder="Username"
+                    value={loginName}
+                    onChange={(e) => setLoginName(e.target.value)}
+                  />
+  
+                  <input
+                    type="password"
+                    placeholder="Password"
+                    value={loginPassword}
+                    onChange={(e) => setLoginPassword(e.target.value)}
+                  />
+  
+                  <button type="submit">Login</button>
+                  <button className="loginHelpBtn" onClick={(e) => setForgotPassword(true)}>Forgot Password</button>
+                </form>
+              ) : (
+                <form onSubmit={verifyLoginCode}>
+                  <input
+                    type="text"
+                    placeholder="Enter code from email"
+                    value={loginCode}
+                    onChange={(e) => setLoginCode(e.target.value)}
+                  />
+                  <button type="submit">Verify Code</button>
+                </form>
+              )}
             ) : (
-              <form onSubmit={verifyLoginCode}>
-                <input
-                  type="text"
-                  placeholder="Enter code from email"
-                  value={loginCode}
-                  onChange={(e) => setLoginCode(e.target.value)}
-                />
-                <button type="submit">Verify Code</button>
-              </form>
+              <form onSubmit={forgotPassword}>
+                  <input
+                    type="text"
+                    placeholder="Username"
+                    value={loginName}
+                    onChange={(e) => setLoginName(e.target.value)}
+                  />
+  
+                  <input
+                    type="email"
+                    placeholder="Email"
+                    value={email}
+                    onChange={(e) => setLoginPassword(e.target.value)}
+                  />
+  
+                  <button type="submit">Forgot Password</button>
+                  <button className="loginHelpBtn" onClick={(e) => setForgotPassword(false)}>Login</button>
+                </form>
             )}
           </>
         ) : (
